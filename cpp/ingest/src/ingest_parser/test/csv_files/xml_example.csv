@@ -1,0 +1,16 @@
+﻿title,movie_release_date,date_of_sale,imdb_rank,hd_purchase_price,sd_purchase_price,revenue,xml
+'Round Midnight,10/29/13,10/5/18,3114,14.99,,39.57,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/7/18,3114,14.99,9.99,48.36,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/9/18,3114,14.99,9.99,21.98,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/12/18,3382,14.99,,13.19,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/13/18,3382,14.99,9.99,29,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/15/18,3382,14.99,,13.19,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/16/18,3382,14.99,,13.19,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/17/18,3382,14.99,,20.21,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/18/18,2672,14.99,9.99,8.79,
+'Round Midnight,10/29/13,10/19/18,2672,14.99,9.99,12.3,
+'Round Midnight,10/29/13,10/20/18,2672,14.99,,26.38,
+'Round Midnight,10/29/13,10/26/18,3288,14.99,,13.19,<Main/>
+'Round Midnight,10/29/13,10/28/18,3288,14.99,9.99,30.77,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/29/18,3288,9.99,,43.07,<Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main>
+'Round Midnight,10/29/13,10/30/18,3288,9.99,9.99,26.37,<Items><Main><Platform>iTunes</Platform><PlatformID>353736518</PlatformID><Type>TVEpisode</Type><TVSeriesID>262603760</TVSeriesID></Main></Items>

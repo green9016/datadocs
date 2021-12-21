@@ -1,0 +1,26 @@
+# Libxml2 Repository External Project template
+#
+# To use, ddd the following in your CMakefile.txt
+#
+# fetch_dependency(xml2 "cmake/libxml2/libxml2.txt.in")
+# target_include_directories(<your_target> PRIVATE $<TARGET_PROPERTY:xml2,INTERFACE_INCLUDE_DIRECTORIES>)
+# target_link_libraries(<your_target> PUBLIC xml2)
+#
+# Note that zlib and ICU must be built too
+
+cmake_minimum_required(VERSION 2.8.2)
+
+project(libxml2-download)
+
+include(ExternalProject)
+ExternalProject_Add(libxml2-download
+  GIT_REPOSITORY    https://github.com/GNOME/libxml2.git
+  GIT_TAG           v2.9.10
+  SOURCE_DIR        "${CMAKE_BINARY_DIR}/libxml2"
+  BINARY_DIR        "${CMAKE_BINARY_DIR}/libxml2-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND     ""
+  INSTALL_COMMAND   ""
+  TEST_COMMAND      ""
+  CMAKE_ARGS        "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}"
+)

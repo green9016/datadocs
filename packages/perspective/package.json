@@ -1,0 +1,69 @@
+{
+    "name": "@jpmorganchase/perspective",
+    "version": "0.2.23",
+    "description": "Perspective.js",
+    "main": "build/perspective.node.js",
+    "browser": "cjs/js/perspective.parallel.js",
+    "module": "cjs/js/perspective.parallel.js",
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "build/*",
+        "cjs/**/*",
+        "index.d.ts",
+        "babel.config.js"
+    ],
+    "typings": "index.d.ts",
+    "scripts": {
+        "bench": "node ../../scripts/bench.js",
+        "prebuild": "mkdirp build && mkdirp obj",
+        "cpp": "npm-run-all build:cpp test:cpp",
+        "build": "npm-run-all build:babel build:webpack",
+        "build:babel": "babel src/js --source-maps --out-dir cjs/js",
+        "build:webpack": "npm-run-all -p build:webpack:*",
+        "build:webpack:umd": "webpack --color --config src/config/perspective.config.js",
+        "build:webpack:node": "webpack --color --config src/config/perspective.node.config.js",
+        "docs": "npm-run-all docs:jsdoc docs:deploy",
+        "docs:jsdoc": "jsdoc2md src/js/perspective.js -p list --separators --no-gfm > README.md",
+        "docs:deploy": "(echo \"---\nid: perspective\ntitle: \\`perspective\\` API\n---\n\n\"; cat README.md) > ../../docs/obj/perspective.md",
+        "test:build": "cpx \"test/html/*\" build",
+        "test:run": "jest --color --ci",
+        "test": "npm-run-all test:build test:run",
+        "clean": "rimraf build && rimraf obj && rimraf cjs"
+    },
+    "jest": {
+        "roots": [
+            "test/js"
+        ],
+        "transform": {},
+        "transformIgnorePatterns": [
+            "/node_modules/(?!@apache)",
+            "/build/"
+        ],
+        "verbose": true,
+        "testURL": "http://localhost/",
+        "automock": false
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jpmorganchase/perspective"
+    },
+    "author": "",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "@apache-arrow/es2015-esm": "0.16.0",
+        "@babel/runtime": "^7.3.4",
+        "bufferutil": "~3.0.0",
+        "d3-array": "^1.2.1",
+        "flatbuffers": "^1.10.2",
+        "lodash": "^4.17.4",
+        "moment": "^2.19.1",
+        "papaparse": "^4.3.6",
+        "text-encoding-utf-8": "^1.0.2",
+        "tslib": "^1.9.3"
+    },
+    "devDependencies": {
+        "@jpmorganchase/perspective-webpack-plugin": "^0.2.21"
+    }
+}

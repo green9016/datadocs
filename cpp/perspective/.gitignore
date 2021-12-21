@@ -1,0 +1,5 @@
+boost
+build_*
+build-*
+cmake-build*
+obj

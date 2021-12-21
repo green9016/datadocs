@@ -1,0 +1,501 @@
+.formula-list {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    color: black;
+    margin: 0px 0px;
+    padding: 0;
+    z-index: 85;
+    overflow: visible;
+    position: absolute;
+    white-space: nowrap;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 22px;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
+    width: calc(340px + 2*10px);
+    left: 45px;
+    top: 172px;
+    user-select: none;
+}
+
+.formula-list-item {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    white-space: nowrap;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 22px;
+    margin: 0;
+    cursor: pointer;
+    color: #000;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+    padding: 1px 10px;
+    background: #fff;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    user-select: none;
+}
+
+.formula-list-item.active {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    white-space: nowrap;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 22px;
+    margin: 0;
+    cursor: pointer;
+    color: #000;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+    padding: 1px 10px;
+    background: #f5f5f5;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    user-select: none;
+}
+
+.formula-list-item-func-name {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    white-space: nowrap;
+    font-weight: normal;
+    line-height: 22px;
+    cursor: pointer;
+    flex: 1;
+    direction: ltr;
+    font-family: Inconsolata,monospace,arial,sans,sans-serif;
+    margin: -2px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #202124;
+    font-size: 14px;
+    user-select: none;
+}
+
+.formula-list-item-func-desc {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    line-height: 22px;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #5f6368;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    display: block;
+    user-select: none;
+}
+
+.formula-help-popup {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,.2);
+    color: #222;
+    font-size: 11px;
+    position: absolute;
+    z-index: 1000;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
+    line-height: 15px;
+    width: calc(340px + 2*10px);
+    visibility: visible;
+    left: 45px;
+    top: 157px;
+    opacity: 1;
+}
+
+.formula-help-popup-body {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    color: #222;
+    font-size: 11px;
+    line-height: 15px;
+    visibility: visible;
+    border-top: 1px solid #ebebeb;
+    margin-top: 0px;
+}
+.formula-help-popup-title {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-size: 11px;
+    visibility: visible;
+    display: flex;
+    direction: ltr;
+    background-color: #f5f5f5;
+    color: #3c4043;
+    line-height: 16px;
+    border-radius: 4px 4px 0px 0px;
+    padding: 8px 12px;
+}
+.formula-help-popup-content {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    color: #222;
+    font-size: 11px;
+    line-height: 15px;
+    visibility: visible;
+    padding-bottom: 2px;
+}
+
+.formula-help-popup-example {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    color: #222;
+    font-size: 11px;
+    line-height: 15px;
+    visibility: visible;
+    padding: 8px 12px 3px;
+}
+.formula-help-popup-about {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    color: #222;
+    font-size: 11px;
+    line-height: 15px;
+    visibility: visible;
+    padding: 8px 12px 3px;
+    padding-bottom: 12px;
+    padding-top: 4px;
+}
+.formula-help-popup-parameter {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    color: #222;
+    font-size: 11px;
+    line-height: 15px;
+    visibility: visible;
+    padding: 12px 0px;
+}
+.formula-help-popup-section-title {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    visibility: visible;
+    font-size: 11px;
+    line-height: 18px;
+    color: #80868b;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: 500;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+}
+.formula-help-popup-example-holder {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    color: #222;
+    font-size: 11px;
+    visibility: visible;
+    text-align: left;
+    line-height: 13px;
+}
+.formula-help-popup-example-formula {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    color: #222;
+    visibility: visible;
+    text-align: left;
+    line-height: 13px;
+    flex: 1;
+    direction: ltr;
+    overflow: hidden;
+    font-family: 'Roboto Mono','Consolas',monospace;
+    font-size: 13px;
+    padding: 0;
+}
+.formula-help-popup-example-func-name {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    color: #222;
+    visibility: visible;
+    text-align: left;
+    line-height: 13px;
+    direction: ltr;
+    font-family: 'Roboto Mono','Consolas',monospace;
+    font-size: 13px;
+    text-decoration: inherit;
+}
+.formula-help-popup-example-args-holder {
+    
+}
+.formula-help-popup-about-content {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    line-height: 15px;
+    visibility: visible;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    color: #3c4043;
+}
+.formula-help-popup-parameter-section {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    color: #222;
+    font-size: 11px;
+    line-height: 15px;
+    visibility: visible;
+    padding: 0px 12px 4px;
+}
+
+.formula-help-popup-parameter-section-title.active {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    visibility: visible;
+    font-family: 'Roboto Mono','Consolas',monospace;
+    font-size: 13px;
+    line-height: 20px;
+    transition: 0.218s ease-in;
+    color: #188038;
+    font-weight: bold;
+}
+
+.formula-help-popup-parameter-section-title {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    visibility: visible;
+    font-family: 'Roboto Mono','Consolas',monospace;
+    font-size: 13px;
+    line-height: 20px;
+    transition: 0.218s ease-in;
+    color: #80868b;
+}
+.formula-arguments-help-parameter.active {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    visibility: visible;
+    text-align: left;
+    line-height: 13px;
+    direction: ltr;
+    font-family: 'Roboto Mono','Consolas',monospace;
+    font-size: 13px;
+    unicode-bidi: -webkit-isolate;
+    border-radius: 4px;
+    padding-left: 1px;
+    transition: 0.218s ease-in;
+    display: inline-block;
+    background-color: transparent;
+    color: #188038;
+    font-weight: bold;
+}
+.formula-arguments-help-parameter {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    color: #222;
+    visibility: visible;
+    text-align: left;
+    line-height: 13px;
+    direction: ltr;
+    font-family: 'Roboto Mono','Consolas',monospace;
+    font-size: 13px;
+    unicode-bidi: -webkit-isolate;
+    border-radius: 4px;
+    padding-left: 1px;
+    transition: 0.218s ease-in;
+    display: inline-block;
+}
+
+.formula-arguments-help-button-container {
+    --docs-material-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    --docs-material-font-weight-normal: 400;
+    --docs-material-font-weight-bold: 500;
+    --docs-material-font-size-normal: 14px;
+    --docs-material-font-size-9: 9px;
+    --docs-material-font-size-11: 11px;
+    --docs-material-font-size-12: 12px;
+    --docs-material-font-size-22: 22px;
+    --docs-material-header-font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+    font-size: 11px;
+    visibility: visible;
+    direction: ltr;
+    color: #3c4043;
+    line-height: 16px;
+    margin-right: 0px;
+}

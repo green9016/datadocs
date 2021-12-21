@@ -1,0 +1,13 @@
+﻿{
+	"status": "STATUS_INVALID_FILE",
+	"sourceType": "CSV",
+	"delimiter": ",",
+	"rowDelimiter": "",
+	"commentCharacter": null,
+	"charset": "",
+	"quote": "\"",
+	"escape": null,
+	"firstDataRow": 0,
+	"commentLinesSkippedInParsing": 0,
+	"columnInfo": []
+}

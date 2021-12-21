@@ -1,0 +1,42 @@
+#ifndef ZIP_READER_H
+#define ZIP_READER_H
+
+#include "inferrer.h"
+#include "file_reader.h"
+
+namespace Ingest {
+
+class ZIPParser : public Parser
+{
+public:
+	static Parser* create_parser(std::shared_ptr<BaseReader> reader);
+	ZIPParser(std::shared_ptr<BaseReader> reader);
+	virtual ~ZIPParser() override;
+	virtual bool do_infer_schema() override;
+	virtual Schema* get_schema() override;
+	virtual bool open() override;
+	virtual void close() override;
+	virtual int get_percent_complete() override;
+	virtual size_t get_sheet_count() override;
+	virtual std::vector<std::string> get_sheet_names() override;
+	virtual bool select_sheet(const std::string& sheet_name) override;
+	virtual bool select_sheet(size_t sheet_number) override;
+	virtual size_t get_file_count() override;
+	virtual std::vector<std::string> get_file_names() override;
+	virtual bool select_file(const std::string& file_name) override;
+	virtual bool select_file(size_t file_number) override;
+
+protected:
+	bool do_open_zip();
+	virtual int64_t get_next_row_raw(RowRaw& row) override;
+
+	Schema m_invalid_schema;
+	std::shared_ptr<BaseReader> m_reader;
+	void* m_zip;
+	std::vector<std::string> m_files;
+	std::unique_ptr<Parser> m_parser;
+};
+
+}
+
+#endif

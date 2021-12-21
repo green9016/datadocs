@@ -1,0 +1,118 @@
+/******************************************************************************
+ *
+ * Copyright (c) 2017, the Perspective Authors.
+ *
+ * This file is part of the Perspective library, distributed under the terms of
+ * the Apache License 2.0.  The full license can be found in the LICENSE file.
+ *
+ */
+
+@import "../less/variables";
+@import "material";
+
+@import (css) url("https://fonts.googleapis.com/css?family=Open+Sans");
+@import (css) url("https://fonts.googleapis.com/css?family=Material+Icons");
+@import (css) url("https://fonts.googleapis.com/css?family=Roboto+Mono");
+
+perspective-viewer {
+    background-color: @coolgrey800;
+    color: #cfd8dc;
+
+    --plugin--background: @coolgrey700;
+
+    --column-drop-label--color: #666;
+    --column--border-color: @coolgrey600;
+    --column-drop-target--background: @blue900;
+    --active-column-selector--color: @lightblue600;
+    --column_type-float--color: @lightblue600;
+    --column_type-string--color: rgb(255, 136, 136);
+    --psp-text-field--border-color: @lightblue600;
+    --button-hover--color: @lightblue600;
+
+    --hypergrid-tree-header--background: @coolgrey700;
+    --hypergrid-tree-header--color: #eee;
+    --hypergrid-header--background: @coolgrey700;
+    --hypergrid-separator--color: #eee;
+    --hypergrid-header--color: #eee;
+
+    --hypergrid-positive--color: @lightblue600;
+    --hypergrid-negative--color: rgb(255, 136, 136);
+    --hypergrid-positive--background: @coolgrey700;
+    --hypergrid-negative--background: @coolgrey700;
+
+    --hypergrid--font-size: 12px;
+    --hypergrid-header--font-size: 12px;
+    --hypergrid--font-family: "Open Sans";
+    --hypergrid-header--font-family: "Open Sans";
+
+    --hypergrid-row-hover--background: #555;
+    --hypergrid-row-hover--color: #eee;
+    --hypergrid-cell-hover--background: #444;
+    --hypergrid-cell-hover--color: #eee;
+
+    --highcharts-label--fill: @coolgrey200;
+    --highcharts-rect--opacity: 0.85;
+    --highcharts-grid-line--stroke: @coolgrey600;
+    --highcharts-tooltip--background: @coolgrey800;
+
+    --d3fc-legend--text: rgb(187, 187, 187);
+    --d3fc-sunburst--labels: rgb(187, 187, 187);
+    --d3fc-axis--ticks: rgb(187, 187, 187);
+    --d3fc-axis--lines: rgb(85, 85, 85);
+    --d3fc-tooltip--background: #333333;
+    --d3fc-tooltip--color: rgb(207, 216, 220);
+    --d3fc-series: rgba(31, 119, 180, 0.8);
+    --d3fc-series-1: #0366d6;
+    --d3fc-series-2: #ff7f0e;
+    --d3fc-series-3: #2ca02c;
+    --d3fc-series-4: #d62728;
+    --d3fc-series-5: #9467bd;
+    --d3fc-series-6: #8c564b;
+    --d3fc-series-7: #e377c2;
+    --d3fc-series-8: #7f7f7f;
+    --d3fc-series-9: #bcbd22;
+    --d3fc-series-10: #17becf;
+    --d3fc-gradient-full: linear-gradient(
+        #4d342f 0%,
+        #e4521b 22.5%,
+        #feeb65 42.5%,
+        #f0f0f0 50%,
+        #dcedc8 57.5%,
+        #42b3d5 67.5%,
+        #1a237e 100%
+    );
+    --d3fc-gradient-positive: linear-gradient(
+        #222222 0%,
+        #1a237e 35%,
+        #42b3d5 70%,
+        #dcedc8 100%
+    );
+    --d3fc-gradient-negative: linear-gradient(
+        #feeb65 0%,
+        #e4521b 35%,
+        #4d342f 70%,
+        #222222 100%
+    );
+    --highcharts-heatmap-gradient-full: linear-gradient(
+        #feeb65 0%,
+        #e4521b 22.5%,
+        #4d342f 42.5%,
+        #222222 50%,
+        #1a237e 57.5%,
+        #42b3d5 67.5%,
+        #dcedc8 100%
+    );
+    --highcharts-heatmap-gradient-positive: linear-gradient(
+        #222222 0%,
+        #1a237e 35%,
+        #42b3d5 70%,
+        #dcedc8 100%
+    );
+    --highcharts-heatmap-gradient-negative: linear-gradient(
+        #feeb65 0%,
+        #e4521b 35%,
+        #4d342f 70%,
+        #222222 100%
+    );
+    --warning--color: #333;
+}

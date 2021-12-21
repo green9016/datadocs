@@ -1,0 +1,219 @@
+/******************************************************************************
+ *
+ * Copyright (c) 2017, the Perspective Authors.
+ *
+ * This file is part of the Perspective library, distributed under the terms of
+ * the Apache License 2.0.  The full license can be found in the LICENSE file.
+ *
+ */
+
+:host {
+    position: relative;
+    color: #666;
+
+    table {
+        font: 12px "Open Sans", helvetica, sans-serif;
+    }
+
+    td.hover {
+        background-color: #eeeeee;
+    }
+
+    tr.hover {
+        background-color: #f6f6f6;
+    }
+
+    td.positive {
+        color: #1078d1;
+    }
+
+    td.negative {
+        color: #de3838;
+    }
+
+    #gridWrapper {
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        padding: var(--hypergrid--padding, 0px);
+    }
+
+    #mainGrid {
+        & > div {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        position: relative;
+        width: 100%;
+        //height: 100%;
+        // Grid Data
+        ////height: calc(100vh - (10px + 10px + 39px));
+        ///height: 100%;
+        // Empty Grid
+        //height: calc(100vh - (10px + 10px + 75px));
+        // New Design
+        //height: calc(100vh - (10px + 10px + 75px + 25px));
+        //height: calc(100vh - (70px + 10px + 25px));
+        //height: calc(100vh - (60px + 10px + 25px));
+        height: calc(100vh - (50px + 10px + 10px + 25px));
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+
+        .mount-div-vertical-scroll{
+           border-radius: 0 4px 0 0;
+        }
+    }
+
+    .not-contain-bottom-panel{
+        height: calc(100vh - (10px + 10px + 75px)) !important;
+    }
+
+    #mainGrid input {
+        margin: 0px;
+    }
+
+    #mainGrid.no-source-loaded{
+      //height: calc(100vh - (60px + 70px + 10px + 25px)) !important;
+      height: calc(100vh - (50px + 70px + 10px + 10px + 25px)) !important;
+
+      .mount-div-vertical-scroll {
+          border-radius: 0 !important;
+      }
+    }
+
+    #mainGrid.with-header-outsite-of-perspective{
+        // Nothing to do
+    }
+
+    #mainGrid.without-header-outsite-of-perspective{
+        height: calc(100vh - (10px + 25px));
+    }
+
+    /*
+    div.finbar-vertical {
+        margin: 0px 0px 0px 0px !important;
+        // Perspective scroll
+        //width: 15px !important;
+        // Custom scroll
+        width: 11px !important;
+        box-shadow: 0 0 0px #000, 0 0 0px #000, 0 0 0px #000;
+        //height: 100%;
+        //height: -webkit-calc(100% - 45px) !important;
+        //height: -moz-calc(100% - 45px) !important;
+        //height: calc(100% - 45px) !important;
+
+        background: rgb(248, 248, 248);
+        border-width: 0px 1px 1px;
+        border-style: solid;
+        border-color: rgb(217, 217, 217);
+        border-image: initial;
+        box-sizing: border-box;
+    }
+
+    div.finbar-vertical div.thumb {
+        width: var(--hypergrid-scrollbar--width, 13px);
+        right: -1px;
+        background-color: rgba(158, 158, 158, 1);
+        box-shadow: 0 0 0px #000, 0 0 0px #000, 0 0 0px #000;
+        // Perspective scroll
+        //margin: 45px 0px 0px 0px !important;
+        // Disabled perspective scroll
+        //margin: 45px 0px 0px 0px !important;
+        border-radius: var(--hypergrid-scrollbar--border-radius, 0px);
+    }
+
+    div.finbar-horizontal {
+        margin: 0px !important;
+        height: 15px !important;
+        box-shadow: 0 0 0px #000, 0 0 0px #000, 0 0 0px #000;
+
+        background: rgb(248, 248, 248);
+        border: 1px solid rgb(217, 217, 217);
+        box-sizing: border-box;
+    }
+
+    div.finbar-horizontal div.thumb {
+        //margin: -3px 2px;
+        margin: -3px 2px -3px 51px;
+        height: var(--hypergrid-scrollbar--width, 13px);
+        bottom: 4px;
+        background-color: rgba(158, 158, 158, 1);
+        box-shadow: 0 0 0px #000, 0 0 0px #000, 0 0 0px #000;
+        border-radius: var(--hypergrid-scrollbar--border-radius, 0px);
+    }
+    */
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+    	color: slategray;
+    }
+
+    .token.punctuation {
+    	color: #999;
+    }
+
+    .namespace {
+    	opacity: .7;
+    }
+
+    .token.property,
+    .token.tag,
+    .token.boolean,
+    .token.number,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+    	color: #905;
+    }
+
+    .token.selector,
+    .token.attr-name,
+    .token.string,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+    	color: #690;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+    	color: #9a6e3a;
+    	background: hsla(0, 0%, 100%, .5);
+    }
+
+    .token.atrule,
+    .token.attr-value,
+    .token.keyword {
+    	color: #07a;
+    }
+
+    .token.function,
+    .token.class-name {
+    	color: #DD4A68;
+    }
+
+    .token.regex,
+    .token.important,
+    .token.variable {
+    	color: #e90;
+    }
+
+    .token.important,
+    .token.bold {
+    	font-weight: bold;
+    }
+    .token.italic {
+    	font-style: italic;
+    }
+
+    .token.entity {
+    	cursor: help;
+    }
+}

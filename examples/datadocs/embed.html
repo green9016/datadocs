@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+  <link rel="stylesheet" type="text/css" href="build.css"/>
+  <script src="perspective.view.js"></script>
+  <script src="hypergrid.plugin.js"></script>
+  <script src="highcharts.plugin.js"></script>
+  <script src="perspective.js"></script>
+  <link rel='stylesheet' href="csv.css" is="custom-style">
+  <link rel='stylesheet' href="material.css" is="custom-style">
+  <link rel='stylesheet' href="custom.css" is="custom-style">
+
+</head>
+
+<body class="application">
+
+  <div id="wrapper">
+    <div id="page-content-wrapper">
+      <div class="page-content">
+          <perspective-viewer></perspective-viewer>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="main-loader" page-loader></div>
+    <script>
+
+        document.addEventListener("WebComponentsReady", function() {
+          fileName = window.location.hash.substr(1)
+          if(!fileName){
+            // Temporarily use one column. Once we update cpp to allow empty grid, we will just pass data as []
+            var data = [
+              {" ": ""}
+            ];
+
+            var psp = document.getElementsByTagName("perspective-viewer")[0];
+            psp.emptyGridNotification();
+            psp.load(data);
+          }
+        });
+    </script>
+</body>
+</html>

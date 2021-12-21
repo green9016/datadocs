@@ -1,0 +1,24 @@
+<svg width="20" height="21" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <title>background</title>
+        <rect fill="none" id="canvas_background" height="23" width="22" y="-1" x="-1"/>
+        <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+            <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+        </g>
+    </g>
+    <g>
+        <title>Layer 1</title>
+        <text stroke="#000" transform="matrix(0.43316609356348557,0,0,0.4345397692435455,-0.5146975718432478,-1.5125234698660412) " font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_1" y="30.696252" x="6.439303" stroke-width="0" fill="#000000">.0</text>
+
+        <g stroke="null" id="svg_11">
+            <g stroke="null"
+               transform="matrix(0.6059340693232376,0,0,0.47919682717190365,13.615178722214017,25.27899024923763) "
+               id="svg_7" fill-rule="evenodd" fill="none">
+                <g stroke="null" id="svg_8" fill="#000000">
+                    <path stroke="null" id="svg_9"
+                          d="m-3.083734,-18.361956l10,0l0,-6l-10,0l0,-3l-6,6l6,6l0,-3l0,0zm0,0"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

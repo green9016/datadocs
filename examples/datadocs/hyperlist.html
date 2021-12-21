@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Hyper List Demo w/ 2 million rows</title>
+  <script src="hyperlist.js"></script>
+  <style>
+    body, html {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      min-height: 100%;
+      min-width: 100%;
+      text-align: center;
+      background-color: #F1F1F1;
+      font-family: Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    @media
+    only screen and (-webkit-min-device-pixel-ratio : 1.5),
+    only screen and (min-device-pixel-ratio : 1.5) {
+      .container {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+      }
+    }
+
+    .container {
+      background-color: #FFF;
+    }
+
+    .vrow p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+      color: #666;
+    }
+
+    #ul_list{
+      height: 200px;
+      overflow: auto;
+      width: 349px;
+      padding: 0;
+
+    }
+    #ul_list>li{
+      padding: 5px 0;
+      width: 100%;
+      list-style-type: unset;
+      display: block;
+    }
+    #ul_list>tr{
+    }
+  </style>
+</head>
+<body>
+  <ul id="ul_list">
+  </ul>
+  <script>
+    window.onload = function() {
+      var ul = document.getElementById("ul_list");
+
+      var pool = new Array(50).fill(null).map((row, i) => ({
+        name: "Name " + Math.random()
+      }));
+
+      var count = 2000000;
+      var data = new Array(count);
+
+      for (let i = 0; i < count; i++) {
+        data[i] = Object.assign({}, pool[Math.floor(Math.random() * pool.length)], {
+          id: i + 1
+        });
+      }
+
+      var config = {
+        height: 200,//window.innerHeight - 28,
+        itemHeight: 24,
+        total: count,
+        width: 349,
+        scrollerTagName: "li",
+
+        // Set to true to put into 'chat mode'.
+        reverse: false,
+
+        generate(row) {
+          var el = document.createElement('li');
+          var d = data[row];
+
+          el.innerHTML = `
+            <div>${d.name}</div>
+          `;
+          return el;
+        }
+      };
+
+      var list = HyperList.create(ul, config);
+
+      window.onresize = function(e) {
+        config.height = window.innerHeight - 28;
+        list.refresh(ul, config);
+      };
+
+      ul.classList.add('container');
+    }
+  </script>
+
+</body>
+</html>

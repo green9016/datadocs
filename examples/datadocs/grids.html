@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Multiple Grids</title>
+  <style>
+    body{
+        background-color: #ccc;
+        padding: 0px;
+        margin: 10px;
+    }
+    .css-iframe-block{
+        /*padding-left: 10px;
+        padding-right: 10px;*/
+        padding-bottom: 10px;
+    }
+    .css-iframe-content{
+        height: calc(100vh - (10px + 10px + 50px));
+        width: 100%;
+        border: 0px;
+    }
+    .css-bottom-panel{
+        padding: 5px;
+    }
+
+    .css-button-remove-panel{
+        position: absolute;
+        right: 20px;
+    }
+
+    iframe{
+      border-radius: 5px 5px 5px 5px;
+    }
+  </style>
+</head>
+
+<body>
+    <div id="ifrmList">
+        <div class="css-iframe-block">
+            <iframe src="embed.html" class="css-iframe-content" scrolling="no"></iframe>
+        </div>
+    </div>
+  <div class="css-bottom-panel">
+    <button class="css-button-add-panel" onclick="addPanel();">ADD PANEL</button>
+  </div>
+    <script>
+        function addPanel(){
+
+            // Create a new div to contain an iframe
+            var d = document.createElement("div");
+            d.className = "css-iframe-block";
+
+            // Create an iframe
+            var ifrm = document.createElement("iframe");
+            ifrm.className = "css-iframe-content";
+            ifrm.setAttribute('src', 'visualize.html');
+
+            d.appendChild(ifrm);
+
+            // Append to body
+            document.getElementById("ifrmList").appendChild(d);
+        }
+
+    </script>
+</body>
+</html>

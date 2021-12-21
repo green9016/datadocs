@@ -1,0 +1,11 @@
+{
+  "lerna": "2.5.1",
+  "packages": [
+    "fin-hypergrid/*",
+    "packages/*",
+    "examples/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "version": "0.2.23"
+}

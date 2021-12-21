@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Datadocs</title>
+  <link rel="shortcut icon" href="static/img/favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="build.css"/>
+  <!-- GAB/Performance: only perspective.view.js and hypergrid.plugin.js are needed (ant NOT perspective.js, as perspective.view.js ALREADY includes an instance of perspective) -->
+  <script src="perspective.view.js"></script>
+  <script src="hypergrid.plugin.js"></script>
+  <!-- GAB/Performance: highcharts.plugin.js will be loaded later on, on "perspective-ready" -->
+  <link rel='stylesheet' href="csv.css" is="custom-style">
+  <link rel='stylesheet' href="material.css" is="custom-style">
+  <link rel='stylesheet' href="custom.css" is="custom-style">
+</head>
+
+<body class="application">
+  <div class="hidden">
+    <img id="triangle_down" src="/static/img/triangle-down.png" style="display: none"></img>
+    <img id="triangle_right" src="/static/img/triangle-right.png" style="display: none"></img>
+    <img id="quick_down_icon" src="/static/img/caret-square-down.png" style="display: none"></img>
+    <img id="qfs_filter" src="/static/img/qfs_filter.png" style="display: none"></img>
+    <img id="qfs_filter_and_sort_asc" src="/static/img/qfs_filter_and_sort_asc.png" style="display: none"></img>
+    <img id="qfs_filter_and_sort_desc" src="/static/img/qfs_filter_and_sort_desc.png" style="display: none"></img>
+    <img id="qfs_sort_asc" src="/static/img/qfs_sort_asc.png" style="display: none"></img>
+    <img id="qfs_sort_desc" src="/static/img/qfs_sort_desc.png" style="display: none"></img>
+  </div>
+  <div ui-view class style>
+    <div ui-view class style>
+
+      <!--<div class="navbar-wrapper ingest-navbar-wrapper" ng-class="isVizMode() ? 'viz-navbar-wrapper' : 'ingest-navbar-wrapper'">
+        <nav id="js-datadocs-header" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="navbar-header viz-navbar-header">
+            <a class="navbar-brand" ui-sref="main.landing.my_data" href="index.html"></a>
+          </div>
+          <div class="flex-spacer"></div>
+          <div class="general-settings">
+            <user-menu>
+              <div class="user-wrapper dropdown" uib-dropdown="">
+                <div class="small-avatar-toggle dropdown-toggle default random-color" ng-class="{'default random-color': !avatar_url}" ng-attr-data-initials="{{!avatar_url ? getUserInitials() : ''}}" uib-dropdown-toggle="" ng-style="avatar_url &amp;&amp; {'background': 'url(' + avatar_url + ') center center / cover no-repeat'}" aria-haspopup="true" aria-expanded="false" data-initials="T"></div>
+                <div class="user-card dropdown-menu-right dropdown-menu" uib-dropdown-menu="">
+                  <div class="card-content">
+                    <div class="user-avatar-wrapper">
+                      <div class="user-avatar random-color" ng-class="{'random-color': !avatar_url}" ng-attr-data-initials="{{!avatar_url ? getUserInitials() : ''}}" ng-style="avatar_url &amp;&amp; {'background': 'url(' + avatar_url + ') center center / cover no-repeat'}" data-initials="T"> </div>
+                      <input type="file" id="change-avatar-file" nv-file-select="" uploader="avatarUploader" style="display:none">
+                      <label for="change-avatar-file" class="change-avatar">Change </label>
+                    </div>
+                    <div class="details">
+                      <div class="user-fullname">Thomas</div>
+                      <div class="user-email">adduser@localhost.com</div>
+                      <div ng-if="isFreeUser()">
+                        <div class="free-user"> Your plan: <b>free</b> <span class="explanatory">(100k limit)</span><br> </div>
+                      </div>
+                      <div class="my-settings">
+                        <a ng-click="showMySettingPage()" class="user-settings toggle-settings-dropdown">My Settings</a>
+                      </div>
+                      <a ng-click="signOut()" id="logout-button" class="button btn btn-filters btn-filters-blue logout-button"> Log Out </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </user-menu>
+          </div>
+        </nav>
+    </div>-->
+
+      <div style="display:flex;flex-wrap:wrap">
+        <div id="pivot_header_container" class="pivot-header-container navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="pivot_header_content">
+                <div class="pivot_header_item">
+
+                  <div class="branding-container pivot-navbar-header viz-navbar-header">
+                    <a class="pivot-navbar-brand" href="javascript: void(0)"></a>
+                  </div>
+
+                  <div class="titlebar-container">
+                    <div class="titlebar">
+                      <div class="titlebar-title-outer">
+                        <div class="titlebar-title-widget">
+                          <div id="titlebar_title_input_label" class="titlebar-title-input-label">
+                            <!--<input type="text" value="Untitled datadoc" />-->
+                            <span id="titlebar_title_input_label_text" class="titlebar-title-input-label-inner">Untitled datadoc</span>
+                          </div>
+                          <input id="titlebar_title_input" type="text" value="Untitled datadoc" class="titlebar-title-input" />
+                        </div>
+                      </div>
+                    </div>
+                    <!--<div class="flex-spacer"></div>-->
+                    <div class="titlebar-buttons">
+                      <!--<div class="toolbar-separator toolbar-inline-block"></div>
+
+                      <div class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-menu-button-search toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-search"></div>
+                            </div>
+                          </div>
+                          <div class="toolbar-menu-button-dropdown with-search toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-arrow-dropdown"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>-->
+
+                      <div id="titlebar_btn_undo" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-menu-button-undo toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-undo"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_redo" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-menu-button-redo toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-redo"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_separator_first" class="toolbar-separator toolbar-inline-block"></div>
+
+                      <div id="titlebar_btn_sort_A_Z" class="toolbar-toggle-button toolbar-inline-block">
+                        <!--<div class="toolbar-button-outer-box toolbar-inline-block">
+
+                          <div class="toolbar-menu-button-sort-A-Z toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-A"></div>
+                            </div>
+                          </div>
+
+                          <div class="toolbar-menu-button-dropdown toolbar-inline-block" style="margin-left: -9px;">
+                            <div class="docs-icon toolbar-inline-block" style="width: 7px;">
+                              <div class="icon-img-container icon-img icon-img-arrow-down"></div>
+                            </div>
+                          </div>
+
+                        </div>
+                        -->
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-button-inner-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-caption toolbar-inline-block">
+                              <div class="sort-text-A">A</div>
+                              <div class="sort-text-Z">Z</div>
+                            </div>
+                            <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block toolbar-icon-arrow-down">
+                                <div class="icon-img-container icon-img icon-img-arrow-down"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div id="titlebar_btn_sort_Z_A" class="toolbar-toggle-button toolbar-inline-block">
+                        <!--<div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-menu-button-sort-A-Z toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-A"></div>
+                            </div>
+                          </div>
+
+                          <div class="toolbar-menu-button-dropdown toolbar-inline-block" style="margin-left: -10px;">
+                            <div class="docs-icon toolbar-inline-block" style="width: 5px;">
+                              <div class="icon-img-container icon-img icon-img-arrow-up"></div>
+                            </div>
+                          </div>
+                        </div>-->
+
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-button-inner-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-caption toolbar-inline-block">
+                              <div class="sort-text-A">Z</div>
+                              <div class="sort-text-Z">A</div>
+                            </div>
+                            <!--
+                            <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block toolbar-icon-arrow-up">
+                                <div class="icon-img-container icon-img icon-img-arrow-up"></div>
+                              </div>
+                            </div>
+                            -->
+                            <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block toolbar-icon-arrow-down">
+                                <div class="icon-img-container icon-img icon-img-arrow-down"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_separator_second" class="toolbar-separator toolbar-inline-block"></div>
+
+                      <div id="titlebar_btn_currency" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-button-inner-box toolbar-inline-block">
+                            $
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_percent" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-button-inner-box toolbar-inline-block">
+                            %
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_decimal_decrease" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-button-inner-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-decimal-decrease toolbar-inline-block">
+                              <div class="docs-icon toolbar-decimal-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-decimal-decrease"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_decimal_increase" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box">
+                          <div class="toolbar-button-inner-box">
+                            <div class="toolbar-menu-button-decimal-increase">
+                              <div class="docs-icon toolbar-decimal-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-decimal-increase"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_caption_123" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-button-inner-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-caption toolbar-inline-block">123</div>
+                            <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-arrow-dropdown"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_separator" class="toolbar-separator toolbar-inline-block"></div>
+                      <div id="titlebar_btn_bold" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-menu-button-bold toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-bold"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_italic" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-menu-button-italic toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-italic"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_caption_indicator" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-color-menu-button-indicator toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-text-color"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_caption_border_all" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-menu-button-border-all toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-border-all"></div>
+                            </div>
+                          </div>
+                          <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-arrow-dropdown"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="titlebar_btn_caption_align_center" class="toolbar-toggle-button toolbar-inline-block">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-menu-button-align-center toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-align-center"></div>
+                            </div>
+                          </div>
+                          <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                            <div class="docs-icon toolbar-inline-block">
+                              <div class="icon-img-container icon-img icon-img-arrow-dropdown"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--<div class="toolbar-separator toolbar-inline-block"></div>
+                      <div class="pivot-general-settings">
+
+                        <user-menu>
+                          <div class="user-wrapper dropdown">
+                            <div class="small-avatar-toggle dropdown-toggle random-color" aria-haspopup="true" aria-expanded="false" data-initials="D"></div>
+                            <div class="user-card dropdown-menu-right dropdown-menu">
+                              <div class="card-content">
+                                <div class="user-avatar-wrapper">
+                                  <div class="user-avatar random-color"> </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </user-menu>
+                      </div>-->
+                      <div id="titlebar_btn_missing_icons_group" class="toolbar-toggle-button toolbar-inline-block" style="display:none">
+                        <div class="toolbar-button-outer-box toolbar-inline-block">
+                          <div class="toolbar-button-inner-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-more toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-more"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div id="titlebar_more_bubble" class="titlebar-more-bubble" style="display:none">
+
+                        <div id="missing_titlebar_btn_undo" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-undo toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-undo"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_redo" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-redo toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-redo"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_separator_first" class="toolbar-separator toolbar-inline-block"></div>
+
+                        <div id="missing_titlebar_btn_sort_A_Z" class="toolbar-toggle-button toolbar-inline-block">
+                          <!--<div class="toolbar-button-outer-box toolbar-inline-block">
+
+                            <div class="toolbar-menu-button-sort-A-Z toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-A"></div>
+                              </div>
+                            </div>
+
+                            <div class="toolbar-menu-button-dropdown toolbar-inline-block" style="margin-left: -9px;">
+                              <div class="docs-icon toolbar-inline-block" style="width: 7px;">
+                                <div class="icon-img-container icon-img icon-img-arrow-down"></div>
+                              </div>
+                            </div>
+
+                          </div>
+                          -->
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-button-inner-box toolbar-inline-block">
+                              <div class="toolbar-menu-button-caption toolbar-inline-block">
+                                <div class="sort-text-A">A</div>
+                                <div class="sort-text-Z">Z</div>
+                              </div>
+                              <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                                <div class="docs-icon toolbar-inline-block toolbar-icon-arrow-down">
+                                  <div class="icon-img-container icon-img icon-img-arrow-down"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_sort_Z_A" class="toolbar-toggle-button toolbar-inline-block">
+                          <!--<div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-sort-A-Z toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-A"></div>
+                              </div>
+                            </div>
+
+                            <div class="toolbar-menu-button-dropdown toolbar-inline-block" style="margin-left: -10px;">
+                              <div class="docs-icon toolbar-inline-block" style="width: 5px;">
+                                <div class="icon-img-container icon-img icon-img-arrow-up"></div>
+                              </div>
+                            </div>
+                          </div>-->
+
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-button-inner-box toolbar-inline-block">
+                              <div class="toolbar-menu-button-caption toolbar-inline-block">
+                                <div class="sort-text-A">Z</div>
+                                <div class="sort-text-Z">A</div>
+                              </div>
+                              <!--
+                              <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                                <div class="docs-icon toolbar-inline-block toolbar-icon-arrow-up">
+                                  <div class="icon-img-container icon-img icon-img-arrow-up"></div>
+                                </div>
+                              </div>
+                              -->
+                              <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                                <div class="docs-icon toolbar-inline-block toolbar-icon-arrow-down">
+                                  <div class="icon-img-container icon-img icon-img-arrow-down"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="missing_titlebar_btn_separator_second" class="toolbar-separator toolbar-inline-block"></div>
+
+                        <div id="missing_titlebar_btn_currency" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-button-inner-box toolbar-inline-block">
+                              $
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_percent" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-button-inner-box toolbar-inline-block">
+                              %
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_decimal_decrease" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-button-inner-box toolbar-inline-block">
+                              <div class="toolbar-menu-button-decimal-decrease toolbar-inline-block">
+                                <div class="docs-icon toolbar-decimal-icon toolbar-inline-block">
+                                  <div class="icon-img-container icon-img icon-img-decimal-decrease"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_decimal_increase" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box">
+                            <div class="toolbar-button-inner-box">
+                              <div class="toolbar-menu-button-decimal-increase">
+                                <div class="docs-icon toolbar-decimal-icon toolbar-inline-block">
+                                  <div class="icon-img-container icon-img icon-img-decimal-increase"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_caption_123" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-button-inner-box toolbar-inline-block">
+                              <div class="toolbar-menu-button-caption toolbar-inline-block">123</div>
+                              <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                                <div class="docs-icon toolbar-inline-block">
+                                  <div class="icon-img-container icon-img icon-img-arrow-dropdown"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_separator" class="toolbar-separator toolbar-inline-block"></div>
+                        <div id="missing_titlebar_btn_bold" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-bold toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-bold"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_italic" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-italic toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-italic"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_caption_indicator" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-color-menu-button-indicator toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-text-color"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_caption_border_all" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-border-all toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-border-all"></div>
+                              </div>
+                            </div>
+                            <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-arrow-dropdown"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="missing_titlebar_btn_caption_align_center" class="toolbar-toggle-button toolbar-inline-block">
+                          <div class="toolbar-button-outer-box toolbar-inline-block">
+                            <div class="toolbar-menu-button-align-center toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-align-center"></div>
+                              </div>
+                            </div>
+                            <div class="toolbar-menu-button-dropdown toolbar-inline-block">
+                              <div class="docs-icon toolbar-inline-block">
+                                <div class="icon-img-container icon-img icon-img-arrow-dropdown"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="bubble-arrowup">
+                            <!--<div class="bubble-arrowimplbefore"></div>
+                            <div class="bubble-arrowimplafter"></div>-->
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div id="wrapper" class="ng-isolate-scope viz-page">
+        <div id="page-content-wrapper" ng-class="isVizMode() ? 'viz-content-wrapper' : 'ingest-content-wrapper'" class="ingest-content-wrapper">
+          <div class="page-content" style="padding-bottom: 0px">
+
+            <!--<div static-include="static/templates/include/viz-pages/viz.html"></div>-->
+            <div>
+              <div ng-if="isIngestMode()" id="search-results" class="widget resizable-wrapper" style="">
+                <div class="results page-content-wrapper" id="drop-zone-area">
+                  <perspective-viewer></perspective-viewer>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div id="main-loader" page-loader></div>
+    <script>
+        /*window.addEventListener("WebComponentsReady", function () {
+            fileName = window.location.hash.substr(1)
+            if(!fileName){
+              //fileName = "investments_short.csv";
+              //document.getElementById("js-datadocs-header").style.display="none";
+              //document.getElementById("js-datadocs-file-zone").style.display="block";
+            }else{
+                //document.getElementById("js-datadocs-header").style.display="block";
+                //document.getElementById("js-datadocs-file-zone").style.display="none";
+
+                var url = './files/' + fileName;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.onload = function () {
+                    var table = perspective.worker().table(xhr.response);
+                    var elem = document.getElementsByTagName("perspective-viewer")[0];
+                    elem._file_name = fileName.replace(/\.[^/.]+$/, "");
+                    elem.loadedNotification();
+                    elem.load(table);
+                }
+
+                xhr.send(null);
+           }
+        });*/
+
+        document.addEventListener("WebComponentsReady", function() {
+
+          var title_input_label = document.getElementById("titlebar_title_input_label");
+          var title_input_label_text = document.getElementById("titlebar_title_input_label_text");
+          var title_input = document.getElementById("titlebar_title_input");
+          var title_button_sort_A_Z = document.getElementById("titlebar_btn_sort_A_Z");
+          var title_button_sort_Z_A = document.getElementById("titlebar_btn_sort_Z_A");
+
+          var title_button_undo = document.getElementById("titlebar_btn_undo");
+          var title_button_redo = document.getElementById("titlebar_btn_redo");
+          var title_button_currency = document.getElementById("titlebar_btn_currency");
+          var title_button_percent = document.getElementById("titlebar_btn_percent");
+          var predict_char_w = 8;
+
+          title_input_label.addEventListener("click", function(){
+              this.style.visibility = "hidden";
+              title_input.classList.add("active");
+              title_input.focus();
+          });
+
+          title_input.addEventListener("blur", function(){
+              this.classList.remove("active");
+              title_input_label.style.visibility = "visible";
+              title_input_label_text.innerHTML = this.value;
+          });
+
+          title_input.addEventListener("focus", function(){
+              title_input_label.style.visibility = "hidden";
+              this.style.width = this.value.length * predict_char_w + "px";
+              title_input.classList.add("active");
+              title_input.focus();
+          });
+
+          title_input.addEventListener("keyup", function(){
+              this.style.width = this.value.length * predict_char_w + "px";
+              title_input_label_text.innerHTML = this.value;
+          });
+
+          title_button_sort_A_Z.addEventListener("click", function(){
+            if (psp) {
+              psp.handle_sort_button("asc");
+            }
+          });
+
+          title_button_sort_Z_A.addEventListener("click", function(){
+            if (psp) {
+              psp.handle_sort_button("desc");
+            }
+          });
+
+          title_button_undo.addEventListener("click", function(){
+            if (psp) {
+              psp.handle_undo_button();
+            }
+          });
+
+          title_button_redo.addEventListener("click", function(){
+            if (psp) {
+              psp.handle_redo_button();
+            }
+          });
+
+          title_button_currency.addEventListener("click", function(){
+            if (psp) {
+              psp.handle_numberic_data_format_button("financial");
+            }
+          });
+
+          title_button_percent.addEventListener("click", function(){
+            if (psp) {
+              psp.handle_numberic_data_format_button("percent");
+            }
+          });
+
+          var arr_icons = [
+
+            {id: "titlebar_btn_undo", name: "undo", width: 32, active: true},
+            {id: "titlebar_btn_redo", name: "redo", width: 32, active: true},
+            {id: "titlebar_btn_separator_first", name: "separator", width: 15, active: true},
+
+            {id: "titlebar_btn_sort_A_Z", name: "undo", width: 32, active: true},
+            {id: "titlebar_btn_sort_Z_A", name: "undo", width: 32, active: true},
+            {id: "titlebar_btn_separator_second", name: "separator", width: 15, active: true},
+
+            {id: "titlebar_btn_currency", name: "currency", width: 32, active: true},
+            {id: "titlebar_btn_percent", name: "percent", width: 32, active: true},
+            {id: "titlebar_btn_decimal_decrease", name: "decimal_decrease", width: 32, active: true},
+            {id: "titlebar_btn_decimal_increase", name: "decimal_increase", width: 32, active: true},
+            {id: "titlebar_btn_caption_123", name: "caption_123", width: 45, active: true},
+
+            {id: "titlebar_btn_separator", name: "separator", width: 15, active: true},
+
+            {id: "titlebar_btn_bold", name: "bold", width: 28, active: true},
+            {id: "titlebar_btn_italic", name: "italic", width: 28, active:true},
+            {id: "titlebar_btn_caption_indicator", name: "caption_indicator", width: 28, active: true},
+            {id: "titlebar_btn_caption_border_all", name: "caption_border_all", width: 39, active: true},
+            {id: "titlebar_btn_caption_align_center", name: "caption_align_center", width: 39, active: true},
+          ];
+
+          var titlebar_min_width = 150;
+          var prefix_padding = 10 + 26 + 5 + 10;
+          var padding = 10;
+          var total_icons_width = arr_icons.map((v)=>v.width).reduce(function(total, num){return total + num + padding});
+
+          function resize_to_fit_titlebar(){
+              var browser_width = window.innerWidth;
+              var title_bar_width = document.getElementById("titlebar_title_input").clientWidth;
+              title_input.style.width = title_input.value.length * predict_char_w + "px";
+              var container_buttons_width = browser_width - (prefix_padding + titlebar_min_width);
+              var contains_missing_icons = false;
+
+              if (container_buttons_width < total_icons_width){
+                  var count_icons_width = 0;
+                  for (var i = 0; i < arr_icons.length; i++){
+                      count_icons_width += arr_icons[i].width + padding;
+
+                      if (count_icons_width <= container_buttons_width){
+                          document.getElementById(arr_icons[i].id).style.display = "inline-block";
+                          document.getElementById( "missing_" + arr_icons[i].id).style.display = "none";
+                      }else{
+                          // Missing icons
+                          document.getElementById(arr_icons[i].id).style.display = "none";
+                          document.getElementById( "missing_" + arr_icons[i].id).style.display = "inline-block";
+                          contains_missing_icons = true;
+                      }
+                  }
+
+                  // Enable the three dot to expand/collapse missing icons
+                  if (contains_missing_icons == true){
+                      document.getElementById("titlebar_btn_missing_icons_group").style.display = "inline-block";
+                  }else{
+                      document.getElementById("titlebar_btn_missing_icons_group").style.display = "none";
+                      document.getElementById("titlebar_more_bubble").style.display = "none";
+                  }
+              }else{
+                  document.getElementById("titlebar_btn_missing_icons_group").style.display = "none";
+                  document.getElementById("titlebar_more_bubble").style.display = "none";
+                  for (var i = 0; i < arr_icons.length; i++){
+                      document.getElementById(arr_icons[i].id).style.display = "inline-block";
+                      document.getElementById( "missing_" + arr_icons[i].id).style.display = "none";
+                  }
+              }
+          }
+          window.addEventListener('resize', function(event){
+              resize_to_fit_titlebar();
+          });
+
+          window.addEventListener('load', function(event){
+              resize_to_fit_titlebar();
+          });
+
+          document.getElementById("titlebar_btn_missing_icons_group").addEventListener("click", function(){
+
+              if (document.getElementById("titlebar_more_bubble").style.display == "none"){
+                  document.getElementById("titlebar_more_bubble").style.display = "block";
+                  this.classList.add("active");
+              }else{
+                document.getElementById("titlebar_more_bubble").style.display = "none";
+                this.classList.remove("active");
+              }
+
+          });
+
+          //fileName = window.location.hash.substr(1)
+          //if(!fileName){
+            // Temporarily use one column. Once we update cpp to allow empty grid, we will just pass data as []
+            var data = [
+              {" ": ""}
+            ];
+
+            var psp = document.getElementsByTagName("perspective-viewer")[0];
+            psp.bootIngest();
+            psp.emptyGridNotification();
+            psp.load(data).then(function(){
+              psp.handle_status_bar();
+
+              // GAB: Asynchronously load the highcharts plugin when everything is ready
+              // This is to improve startup times (as highcharts is only needed after everything is loaded, and user
+              // have interacted with the page to ask for it)
+              const s = document.createElement('script');
+              s.src = "highcharts.plugin.js";
+              s.type = "text/javascript";
+              s.async = true;
+              s.onload = function() {
+                var psp = document.getElementsByTagName("perspective-viewer")[0];
+                psp.updateVisSelector();
+              }
+              document.getElementsByTagName('head')[0].appendChild(s);
+
+            }).catch(function(err){
+
+            });
+
+        });
+    </script>
+</body>
+</html>

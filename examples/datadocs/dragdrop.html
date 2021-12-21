@@ -1,0 +1,996 @@
+<!--
+
+   Copyright (c) 2017, the Perspective Authors.
+
+   This file is part of the Perspective library, distributed under the terms of
+   the Apache License 2.0.  The full license can be found in the LICENSE file.
+
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+    <style>
+        #list {
+            display: flex;
+            flex-direction: column;
+            width: 50%
+        }
+        .right-panel{
+            display: block;
+        }
+        h4{
+            margin: 10px 0 5px 0;
+        }
+        ul{
+            margin: 5px 0;
+        }
+
+        button{
+            margin: 5px 0 5px 0;
+            padding: 7px;
+            background: #ccc;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .drag-plugin{
+            width: 300px;
+            display: inline-block;
+        }
+
+        .dd{
+            max-height: 350px;
+            overflow-y: scroll;
+        }
+
+        perspective-row{
+          display: block;
+          height: 77px;
+        }
+
+    </style>
+
+    <style>
+
+        ul {
+            min-height: 20px;
+        }
+        #active_columns perspective-row {
+            height: 77px !important;
+            animation: expand 0.3s ease-out;
+            --column-selector--color: var(--active-column-selector--color, #999);
+            --is_visible--before: var(--active-column-selector--content, "\25CF");
+        }
+        #inactive_columns perspective-row {
+            animation: expand 0.3s ease-out;
+            --column-selector--color: var(--inactive-column-selector--color, #999);
+            --is_visible--before: var(--inactive-column-selector--content, "\25CB");
+            --row_draggable--animation: none;
+            &:hover {
+                transition: none;
+                opacity: 1;
+            }
+        }
+        #top_panel perspective-row {
+            animation: expand 0.3s ease-out;
+        }
+        #active_columns,
+        #inactive_columns {
+            list-style: none;
+            padding: 0px;
+            width: 100%;
+            margin: var(--column-container--margin, 8px 0px 0px 0px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+        #inactive_columns {
+            perspective-row {
+                opacity: var(--inactive-column--opacity, 1);
+                transition: opacity 0.3s; // --row_draggable--transition: margin-left 0.5s;
+                &.active {
+                    --row_draggable--margin: 0px 0px 0px 10px;
+                    opacity: 0;
+                    height: 0 !important;
+                    overflow: hidden;
+                }
+            }
+        }
+        .columns_horizontal #sub_columns.collapse #side_panel__actions {
+            margin-top: 0px;
+        }
+        #side_panel__exports{
+            padding-bottom: 38px;
+        }
+        #sub_columns {
+            min-height: 33.3%;
+            flex-shrink: 100000;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            width: 100%;
+            &.collapse {
+                #inactive_columns {
+                    display: none;
+                }
+                flex-shrink: 0;
+                min-height: 64px;
+            }
+        }
+        #divider {
+            min-height: 2px;
+            height: 2px;
+            margin: 15px 13px 15px 13px;
+            margin-bottom: 5px;
+        }
+        .column {
+            display: flex;
+            list-style: none;
+            flex-direction: column;
+            flex: 1;
+        }
+        .rrow {
+            display: flex;
+            flex-grow: 1;
+            min-height: 24px;
+            align-items: center;
+            max-width: 400px;
+            list-style: none;
+            min-width: 140px;
+            margin: var(--column-drop-container--margin, 5px 10px 0px 0px);
+        }
+        .rrow.having-container {
+            display: none;
+        }
+        .rrow > div {
+            display: flex;
+            min-height: 24px;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        #top_panel > .rrow > * {
+            width: 100%;
+        }
+        .rrow #psp_row {
+            white-space: nowrap;
+        }
+        #sort perspective-row {
+            --sort_order-display: inline;
+            --sort_order-padding: 0 0 0 10px;
+            &[sort-order="asc"] {
+                --row-sort-order--before: var(--sort-order-asc--before, "\2191");
+            }
+            &[sort-order="desc"] {
+                --row-sort-order--before: var(--sort-order-desc--before, "\2193");
+            }
+            &[sort-order="none"] {
+                --row-sort-order--before: var(--sort-order-none--before, "-");
+            }
+            &[sort-order="asc abs"] {
+                --row-sort-order--before: var(
+                    --sort-order-asc-abs--before,
+                    "\21E7"
+                );
+            }
+            &[sort-order="desc abs"] {
+                --row-sort-order--before: var(
+                    --sort-order-desc-abs--before,
+                    "\21E9"
+                );
+            }
+            &[sort-order="col asc"] {
+                --row-sort-order--before: var(
+                    --sort-order-col-asc--before,
+                    "\2192"
+                );
+            }
+            &[sort-order="col desc"] {
+                --row-sort-order--before: var(
+                    --sort-order-col-desc--before,
+                    "\2190"
+                );
+            }
+            &[sort-order="col asc abs"] {
+                --row-sort-order--before: var(
+                    --sort-order-col-asc-abs--before,
+                    "\21E8"
+                );
+            }
+            &[sort-order="col desc abs"] {
+                --row-sort-order--before: var(
+                    --sort-order-col-desc-abs--before,
+                    "\21E6"
+                );
+            }
+        }
+        #top_panel perspective-row + perspective-row:before {
+            content: ",";
+            padding: 0px 10px 0px 0px;
+        }
+        label {
+            white-space: nowrap;
+            display: inline-block;
+            vertical-align: middle;
+            margin-bottom: 0px;
+        }
+        #drop_target {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            padding: 30px;
+        }
+        #drop_target_inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #drop_target_inner h3 {
+            font-weight: 300;
+        }
+        #config_button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &:hover {
+                color: var(--button-hover--color, inherit);
+            }
+        }
+        .button {
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: normal;
+        }
+        ul {
+            padding: 0px;
+            margin: 0;
+            font-size: 12px;
+        }
+        select::-ms-expand {
+            display: none;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIwLjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA0LjkgMTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQuOSAxMDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiM0NDQ0NDQ7fQo8L3N0eWxlPgo8dGl0bGU+YXJyb3dzPC90aXRsZT4KPHBvbHlnb24gY2xhc3M9InN0MCIgcG9pbnRzPSIxLjQsNC43IDIuNSwzLjIgMy41LDQuNyAiLz4KPHBvbHlnb24gY2xhc3M9InN0MCIgcG9pbnRzPSIzLjUsNS4zIDIuNSw2LjggMS40LDUuMyAiLz4KPC9zdmc+Cg==)
+                no-repeat 95% 50%;
+            background-color: #fff;
+            color: inherit;
+            border-radius: 5px;
+            height: 24px;
+            padding: var(--select--padding, 0px 0px 0px 6px);
+            font-size: 12px;
+        }
+        input {
+            padding: 0 10px 0 10px;
+        }
+        .centered {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #top_panel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            padding: var(--top_panel--padding, 5px 0px 10px 0px);
+            max-width: 1000px;
+            perspective-row {
+                margin-bottom: -1px;
+                display: inline-block;
+                --psp_row-display: inline-block;
+            }
+        }
+        #side_panel {
+            flex: 0 0 auto;
+            padding: var(--side_panel--padding, 10px 10px 0px 11px);
+        }
+        #side_panel > div {
+            display: flex;
+        }
+        #vis_selector_container {
+            min-height: 29px;
+            margin-left: var(--column_selector--width, 20px);
+        }
+        #vis_selector {
+            flex-grow: 1;
+        }
+        #transpose_button {
+            cursor: pointer;
+            min-width: 5px;
+            max-width: 5px;
+            flex-grow: 0;
+            color: #999;
+            font-family: Arial;
+            font-size: 12px;
+            &:hover {
+                color: var(--button-hover--color, inherit);
+            }
+        }
+
+        #pivot_file_zone_container {
+            .pivot_file_zone_content {
+                width: 100%;
+                background-color: #fff;
+                margin: 5px 5px 0px 5px;
+                height: 70px;
+
+                .pivot_file_zone_item{
+                    padding: 10px;
+                }
+                .button {
+                    display: inline-block;
+                    padding: 7px;
+                    background: #ccc;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+
+                    font-size: 14px;
+                }
+
+                .button:hover {
+                    background: #ddd;
+                }
+
+                #pivot_input_file {
+                    display: none;
+                }
+                label {
+                    margin: 0px;
+                }
+            }
+        }
+
+        .upload-drop {
+            pointer-events: none;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border: 2px solid #0480be;
+            z-index: 9999;
+            position: fixed;
+
+            display: none;
+
+            .backdrop {
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.1);
+            }
+
+            .message {
+                font-size: 13px;
+                height: 50px;
+                width: 300px;
+                text-align: left;
+                color: #fff;
+                background-color: #2d2d2d;
+                border-radius: 2px;
+                padding: 0 20px;
+                line-height: 50px;
+                position: fixed;
+                z-index: 9999;
+                margin: 0 auto;
+                right: 0;
+                left: 0;
+                bottom: 20px;
+
+                .folder {
+                    color: #00abff
+                }
+            }
+        }
+
+        .upload-drop-not-allow {
+            pointer-events: none;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 9999;
+            position: fixed;
+
+            display: none;
+
+            .backdrop {
+                width: 100%;
+                height: 100%;
+                //background-color: rgba(0,0,0,0.1);
+            }
+
+            .message {
+                font-size: 13px;
+                height: 50px;
+                width: 300px;
+                text-align: left;
+                color: #fff;
+                background-color: #2d2d2d;
+                border-radius: 2px;
+                padding: 0 20px;
+                line-height: 50px;
+                position: fixed;
+                z-index: 9999;
+                margin: 0 auto;
+                right: 0;
+                left: 0;
+                bottom: 20px;
+
+                .folder {
+                    color: #00abff
+                }
+            }
+        }
+
+        .highlight {
+            display: block;
+        }
+
+        .ingesting-data {
+            //pointer-events: none;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            //border: 2px solid #0480be;
+            z-index: 9999;
+            position: fixed;
+
+            display: none;
+
+            .backdrop {
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.1);
+            }
+
+            .progress-content{
+                position: fixed;
+                right: 0;
+                left: 0;
+                top: 50%;
+
+                .message {
+                    font-size: 14px;
+                    height: 30px;
+                    width: 300px;
+                    text-align: left;
+                    color: #060606;
+                    //background-color: #2d2d2d;
+                    border-radius: 2px;
+                    //padding: 0 20px;
+                    line-height: 30px;
+                    //position: fixed;
+                    position: relative;
+                    z-index: 9999;
+                    margin: 0 auto;
+                    //right: 0;
+                    //left: 0;
+                    //bottom: 20px;
+
+                    .folder {
+                        color: #00abff
+                    }
+
+                    #pivot_querying_label{
+                        color: #00abff;
+                    }
+                }
+
+                .cancel{
+                    cursor: pointer;
+                    display: inline-block;
+                    color: red;
+                }
+
+                .finalizing {
+                    display: inline-block;
+                    color: #00abff
+                }
+
+                .progress {
+                    font-size: 13px;
+                    height: 5px;
+                    width: 300px;
+                    text-align: left;
+                    color: #fff;
+                    background-color: #ccc;
+                    border-radius: 2px;
+                    //padding: 0 20px;
+                    line-height: 50px;
+                    //position: fixed;
+                    position: relative;
+                    z-index: 9999;
+                    margin: 0 auto;
+                    right: 0;
+                    left: 0;
+                    //bottom: 20px;
+                    top: 50%;
+
+                    .bar {
+                      width: 1%;
+                      height: 5px;
+                      background-color: #00abff;
+                      border-radius: 2px;
+                    }
+                }
+            }
+        }
+
+        .show-percentage{
+            display: block;
+        }
+
+        #pivot_tabs_bar {
+          display: flex;
+          align-content: flex-start;
+          overflow: hidden;
+          height: 39px;
+          background-color: #EEEEEE;
+          border-top: 1px solid #AAAAAA;
+          font-size: 13px;
+          padding: 0;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 1030;
+
+          .tab-button {
+            cursor: pointer;
+
+            background-color: #EEEEEE;
+            border: 1px solid transparent;
+            color: #b3b3b3;
+            height: 25px;
+            margin-top: 2px;
+            width: 25px;
+          }
+
+          .add-tab-button {
+            color: #6a6a6a;
+            font-size: 20px;
+            line-height: 20px;
+            text-align: center;
+          }
+
+          .tab-button:hover {
+            border: 1px solid #c6c6c6;
+            border-radius: 2px;
+            color: #000;
+          }
+
+          .tab-button:active {
+            box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+            -moz-box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+            -webkit-box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+          }
+
+          #tabs-list-wrapper {
+            display: inline-block;
+            margin-top: -1px;
+            margin-left: 15px;
+            min-width: 100px;
+            max-width: 70%;
+            overflow-x: hidden;
+            float:left;
+
+            @include mobile-view {
+              display: flex;
+              position: relative;
+              max-width: none;
+            }
+          }
+
+          #tabs-list-wrapper::-webkit-scrollbar {
+            display: none;
+          }
+
+          #tabs-list {
+            display: flex;
+            padding-left: 0;
+            margin-bottom: 0;
+            transition: left .3s ease-out;
+            height: 29px;
+            position: relative;
+            left: 0;
+
+            &.sorting {
+              .single-tab {
+                cursor: move;
+              }
+            }
+
+            @include mobile-view {
+              .fa-caret-down {
+                //display: none;
+              }
+            }
+          }
+
+          .single-tab {
+            display: flex;
+            align-items: center;
+            max-width: 250px;
+            padding: 2px 10px;
+
+            text-decoration: none;
+            list-style: none;
+            vertical-align: top;
+            outline: none;
+            color: #666;
+
+            background-color: #e9e9e9;
+            border: 1px solid #ccc;
+            border-top-color: #aaa;
+            border-radius: 0 0 2px 2px;
+
+            z-index: 1051;
+            cursor: pointer;
+
+            &[disabled] {
+              opacity: .5;
+              pointer-events: none;
+              cursor: default;
+            }
+
+            &:hover {
+              background-color: #f1f1f1;
+            }
+
+            > span {
+              line-height: 25px;
+            }
+
+            > input {
+              line-height: normal;
+              margin: 2px -3px 2px -2px;
+            }
+
+            > i {
+              color: #6A6A6A;
+            }
+
+            &.active,
+            &.sv-active {
+              top: 0;
+              background-color: #fff;
+              box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+              border-color: #aaa;
+              border-top-color: #fff;
+              color: #222;
+              z-index: 1051;
+
+              > i:hover {
+                color: #000;
+              }
+            }
+            &.saving {
+              > i, i:hover {
+                color: #999 !important;
+              }
+            }
+          }
+
+          .left-shadow,
+          .right-shadow {
+            position: absolute;
+            display: block;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            z-index: 1052;
+
+            @include mobile-view {
+              height: 29px;
+            }
+          }
+
+          .left-shadow {
+            left: 0;
+          }
+
+          .right-shadow {
+            right: 0;
+          }
+
+          .left-shadow .fade,
+          .right-shadow .fade {
+            background-color: #d7d7d7;
+            width: 2px;
+            position: relative;
+            height: 100%;
+          }
+
+          .left-shadow .fade-40,
+          .right-shadow .fade-40 {
+            opacity: 0.4;
+          }
+
+          .left-shadow .fade-62,
+          .right-shadow .fade-62 {
+            opacity: 0.62;
+          }
+
+          .left-shadow .fade-82,
+          .right-shadow .fade-82 {
+            opacity: 0.82;
+          }
+
+          #tabs-arrows {
+            display: flex;
+            flex-flow: row nowrap;
+            padding-left:15px;
+          }
+
+          #tabs-bar-content {
+            width: calc(100% - 160px);
+            display: flex;
+            padding: 0 15px;
+
+            @include mobile-view {
+              width: calc(100% - 80px);
+            }
+
+            .add-tab-wrapper {
+              @include mobile-view {
+                display: none;
+              }
+            }
+          }
+
+          #toggle-widgets {
+            width: 80px;
+            height: 100%;
+
+            button {
+              height: 100%;
+              border: 0;
+              padding: 0 15px;
+              background-color: transparent;
+              white-space: nowrap;
+
+              &.disabled {
+                color: #aaa;
+                cursor: default;
+              }
+
+              &.active {
+                background-color: #dadada;
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.22);
+                -moz-box-shadow: inset 0 0 6px rgba(0,0,0,.22);
+                box-shadow: inset 0 0 6px rgba(0,0,0,.22);
+              }
+            }
+          }
+        }
+
+        .read-only{
+          pointer-events: none;
+        }
+    </style>
+
+    <style>
+        .column_search_type, .column_data_format, #rename_group{
+            display:block !important;
+        }
+    </style>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/clusterize.js/0.18.0/clusterize.css" rel="stylesheet">
+    <script src="clusterize.js"></script>
+
+</head>
+
+<body>
+    <div class="drag-plugin">
+        <h4 style="padding: 5px; position: fixed; top: 0">Simple <button onclick="toggle_simple();">...</button></h4>
+        <div id="side_panel_simple" style="padding: 60px 5px 5px 5px">
+            <ul id="dragdrop1" class="dd">
+                <!--
+                <li class="list-group-item">
+                  <span class="glyphicon glyphicon-move my-handle" aria-hidden="true"></span>
+                  Item 1
+                </li>
+                -->
+            </ul>
+        </div>
+    </div>
+    <div class="drag-plugin">
+        <h4 style="padding: 5px; position: fixed; top: 0">ShadowRoot <button onclick="toggle_config();"> ... </button></h4>
+        <div id="side_panel" style="padding: 60px 5px 5px 5px">
+            <ul id="active_columns" class="dd"></ul>
+        </div>
+    </div>
+    <div class="drag-plugin">
+        <h4 style="padding: 5px; top: 0">ShadowRoot with Clusterize</h4>
+        <div id="scrollArea" class="clusterize-scroll">
+            <ul id="contentArea" class="clusterize-content"></ul>
+        </div>
+    </div>
+    <script>
+        // Max N columns
+        var N = 2000;
+
+        var _show_config_simple = true;
+        load_simple();
+
+        function toggle_simple(){
+
+            if (_show_config_simple){
+                document.getElementById("side_panel_simple").style.display = "none";
+            }else{
+                document.getElementById("side_panel_simple").style.display = "block";
+            }
+            _show_config_simple = !_show_config_simple;
+        }
+
+        function load_simple(){
+            toggle_simple();
+
+            var t1 = new Date().getTime();
+
+            var dumpHtml = "";
+            // Create 1000 columns
+
+            for (var i=0; i<N; i++){
+                dumpHtml += '<li class="list-group-item"><span class="glyphicon glyphicon-move my-handle" aria-hidden="true"></span>Col ' + (i+1) +'</li>';
+            }
+
+            document.getElementById("dragdrop1").innerHTML = dumpHtml;
+
+            // List with handle
+            Sortable.create(dragdrop1, {
+                handle: '.list-group-item',
+                animation: 150
+            });
+
+            console.log("open_simple=======", new Date().getTime() - t1);
+        }
+
+
+        var _show_config = true;
+        load_shadowroot();
+
+        function toggle_config(){
+            if (_show_config){
+                document.getElementById("side_panel").style.display = "none";
+            }else{
+                document.getElementById("side_panel").style.display = "block";
+            }
+            _show_config = !_show_config;
+        }
+
+        function load_shadowroot(){
+            var t1 = new Date().getTime();
+            toggle_config();
+
+            //let customElem = document.querySelector('#dragdrop2');
+            //let shadow = customElem.shadowRoot;
+            //shadow.innerHTML = '<strong>This element should be more important!</strong>';
+            //var shadowHost = document.querySelector("#dragdrop2");
+            //var shadowRoot = shadowHost.createShadowRoot();
+            //shadowRoot.textContent = "Hello Shadow DOM World";
+            //shadowRoot.innerHTML = '<strong>This element should be more important!</strong>';
+
+
+
+            var shadowHost = document.querySelector("#active_columns");
+            for (var i=0; i<N; i++){
+                let row = _new_row('Column ' + (i + 1));
+                shadowHost.appendChild(row);
+            }
+
+            shadowHost.addEventListener("drop", (event)=>{
+                console.log("drop======");
+            });
+            shadowHost.addEventListener("dragenter", (event)=>{
+                console.log("dragenter======");
+            });
+            shadowHost.addEventListener("dragend", (event)=>{
+                console.log("dragend======");
+            });
+            shadowHost.addEventListener("dragover", (event)=>{
+                var t1 = new Date().getTime();
+                var offsetY = event.offsetY;
+                var scrollTop = shadowHost.scrollTop;
+                console.log("dragover======", offsetY, scrollTop, new Date().getTime() -t1);
+            });
+            shadowHost.addEventListener("dragleave", (event)=>{
+                console.log("dragleave======");
+            });
+
+            console.log("load_shadowroot=======", new Date().getTime() - t1);
+        }
+
+        function _new_row(name){
+
+          let row = document.createElement("perspective-row");
+          var shadowRoot = row.attachShadow({mode: 'open'});
+          shadowRoot.innerHTML = get_psp_row(name);
+
+          row.addEventListener("row-drag", () => {
+              var t1 = new Date().getTime();
+              console.log("row-drag..........................", new Date().getTime() - t1);
+          });
+          row.addEventListener("row-dragend", () => {
+              var t1 = new Date().getTime();
+              console.log("row-dragend..........................", new Date().getTime() - t1);
+          });
+
+
+          return row;
+        }
+
+        function get_psp_row(name){
+            var html = '<div id="psp_row">' +
+                          '<span class="is_visible"></span>' +
+                          '<div draggable="true" class="row_draggable">' +
+                              '<span id="name" class="column_name">' + name + '</span>' +
+                              '<div class="row_computed">' +
+                                  '<span id="row_edit"></span>' +
+                              '</div>' +
+                              '<span id="sort_order"></span>' +
+                              '<select id="column_aggregate" class="string" style="display:none"></select>' +
+                              '<select id="column_search_type" class="string" style="display:block"><option value="edge">edge</option></select>' +
+                              '<select id="column_data_format" class="string" style="display:block"><option value="text">text</option></select>' +
+                              '<select id="filter_operator" style="display:none"></select>' +
+                              '<input id="filter_operand" placeholder="Value"  style="display:none"/>' +
+                              '<div id="having_group" style="display:none">' +
+                                  '<select id="having_operator"></select>' +
+                                  '<input id="having_operand" placeholder="Value" />' +
+                                  '<span>in</span>' +
+                                  '<select id="having_level"></select>' +
+                              '</div>' +
+                              '<div id="rename_group">' +
+                                  '<input id="rename_field" placeholder="' + name + '" />' +
+                                  '<span id="rename_exclamation" hidden style="display:none">&#x26A0;</span>' +
+                                  '<span id="rename_submit" style="display:none">&#10003;</span>' +
+                              '</div>' +
+                              '<span id="row_exclamation" hidden style="display:none">&#x26A0;</span>' +
+                              '<select id="aggregate_level" style="display:none"></select>' +
+                              '<span id="row_close" style="display:none">&#x2715;</span>' +
+                          '</div>' +
+                      '</div>';
+              return html;
+        }
+
+        // Clusterize
+        var data = [];
+        for (var i=0; i<N; i++){
+            data.push('<li>Tay ' + (i + 1) +' </li>');
+        }
+        var clusterize = new Clusterize({
+          rows: data,
+          scrollId: 'scrollArea',
+          contentId: 'contentArea',
+          dataType: 'element',
+          callbacks: {
+            clusterWillChange: function() {},
+            clusterChanged: function() {},
+            scrollingProgress: function(progress) {}
+          }
+        });
+    </script>
+</body>
+
+</html>

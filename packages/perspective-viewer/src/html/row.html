@@ -1,0 +1,88 @@
+<!--
+
+   Copyright (c) 2017, the Perspective Authors.
+
+   This file is part of the Perspective library, distributed under the terms of
+   the Apache License 2.0.  The full license can be found in the LICENSE file.
+
+-->
+
+<template id="perspective-row">
+    <div id="psp_row">
+        <!--<span class='is_visible'></span>-->
+        <label class="is_visible checkbox-container">
+          <input type="checkbox" name="cb_active_column" id="checkbox_id" /> <span class="checkmark"></span>
+        </label>
+        <div id="dragable_id" draggable='true' class="row_draggable">
+            <div class="row_data">
+              <div class="row_data_details">
+                <div class="row-left">
+                  <!--<div id="colon">:</div>-->
+                  <div id='name' class="column_name hidden"></div>
+                  <div id='alias_name' class="column_name"></div>
+                  <div id="v_name" class="column_name colon"></div>
+                </div>
+
+                <div class="row-right rounded-container">
+                  <div class="rounded-content">
+                    <select id="aggregate_level"></select>
+                  </div>
+                </div>
+
+                <div id="filter_summary_container" class="row-right rounded-container hidden">
+                  <div class="rounded-content">
+                    <div id="filter_summary" class="filter-summary"></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div id="row_icon_info">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2.033 16.01c.564-1.789 1.632-3.932 1.821-4.474.273-.787-.211-1.136-1.74.209l-.34-.64c1.744-1.897 5.335-2.326 4.113.613-.763 1.835-1.309 3.074-1.621 4.03-.455 1.393.694.828 1.819-.211.153.25.203.331.356.619-2.498 2.378-5.271 2.588-4.408-.146zm4.742-8.169c-.532.453-1.32.443-1.761-.022-.441-.465-.367-1.208.164-1.661.532-.453 1.32-.442 1.761.022.439.466.367 1.209-.164 1.661z" style="fill:#ccc;fill-opacity:1;stroke:none"/></svg>
+            </div>
+            <div style="display:none">
+              <div class="row_computed">
+                  <span id="row_edit"></span>
+              </div>
+              <div id="sort_group">
+                  <span>sort by</span>
+                  <select id="sort_by"></select>
+                  <div id="sort_subtotal_group">
+                      <span>in</span>
+                      <select id="sort_subtotal"></select>
+                  </div>
+              </div>
+              <div id="limit_group">
+                  <span>limit</span>
+                  <select id="limit_select"></select>
+                  <select id="limit_type_select"></select>
+              </div>
+
+              <span id="sort_order"></span>
+              <select id="column_aggregate" class="string"></select>
+              <select id="column_period" class="string"></select>
+              <select id="column_show_type" class="string"></select>
+              <select id="column_search_type" class="string"></select>
+              <select id="column_data_format" class="string"></select>
+              <div id="filter_group">
+                  <span>filter by</span>
+                  <select id="filter_by"></select>
+                  <div id="filter_subtotal_group">
+                      <span>in</span>
+                      <select id="filter_subtotal"></select>
+                  </div>
+              </div>
+              <select id="filter_operator"></select>
+              <input id="filter_operand" placeholder="Value" />
+              <div id="rename_group">
+                  <input id="rename_field" placeholder="Rename" />
+                  <span id="rename_exclamation" hidden>&#x26A0;</span>
+                  <span id="rename_submit">&#10003;</span>
+              </div>
+              <span id="row_exclamation" hidden>&#x26A0;</span>
+
+              <span id='row_close'>&#x2715;</span>
+            </div>
+        </div>
+    </div>
+</template>

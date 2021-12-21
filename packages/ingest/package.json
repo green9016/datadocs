@@ -1,0 +1,52 @@
+{
+    "name": "@datadocs/ingest",
+    "version": "0.0.0",
+    "description": "ingest JS",
+    "main": "cjs/js/client/ingest.client.js",
+    "browser": "cjs/js/client/ingest.client.js",
+    "module": "cjs/js/client/ingest.client.js",
+    "files": [
+        "build/**/*",
+        "cjs/**/*"
+    ],
+    "scripts": {
+        "prebuild": "mkdirp cjs",
+        "build:babel": "cpx \"src/**/*\" cjs && babel src/js --source-maps --out-dir cjs/js",
+        "build:webpack:ingest": "webpack --color --config src/config/ingest.config.js",
+        "build": "npm-run-all build:babel build:webpack:*",
+        "watch": "webpack --color --watch --config src/config/ingest.config.js",
+        "test:build": "cpx \"test/html/*\" build && cpx \"test/csv/*\" build && cpx \"test/css/*\" build",
+        "test:run": "jest --silent --color",
+        "test": "npm-run-all test:build test:run",
+        "clean": "rimraf build && rimraf cjs",
+        "clean:screenshots": "rimraf \"screenshots/**/*.@(failed|diff).png\"",
+        "docs": "npm-run-all docs:jsdoc docs:deploy",
+        "docs:jsdoc": "jsdoc2md src/js/ingest.client.js -p list --separators --no-gfm > README.md",
+        "docs:deploy": "(echo \"---\nid: ingest\ntitle: \\`ingest\\` API\n---\n\n\"; cat README.md) > ../../docs/obj/ingest-site.md"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "jest": {
+        "roots": [
+            "test/js"
+        ],
+        "verbose": true,
+        "testURL": "http://localhost/",
+        "transform": {},
+        "automock": false
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/david542542/perspective"
+    },
+    "author": "",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "webpack": "^4.41.4",
+        "webpack-cli": "^3.3.10",
+        "@babel/runtime": "^7.8.4",
+        "wasm-feature-detect": "^1.2.1",
+        "@apache-arrow/es2015-esm": "0.16.0"
+    }
+}

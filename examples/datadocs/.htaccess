@@ -1,0 +1,29 @@
+AddDefaultCharset utf-8
+
+<IfModule mod_mime.c>
+    AddType text/html					html
+    AddType text/css					css
+    AddType text/xml                    xml
+    AddType text/javascript             js
+    AddType application/wasm            wasm
+    AddType application/octet-stream    data
+</IfModule>
+
+<IfModule mod_deflate.c>
+    <IfModule mod_setenvif.c>
+        <IfModule mod_headers.c>
+            SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate|br)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+            RequestHeader append Accept-Encoding "gzip,deflate,br" env=HAVE_Accept-Encoding
+        </IfModule>
+    </IfModule>
+
+    <IfModule mod_filter.c>
+        AddOutputFilterByType BROTLI_COMPRESS;DEFLATE \
+                                             "application/wasm" \
+                                             "application/octet-stream" \
+                                             "text/css" \
+                                             "text/html" \
+                                             "text/javascript" \
+                                             "text/xml"
+    </IfModule>
+</IfModule>

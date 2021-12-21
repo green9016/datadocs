@@ -1,0 +1,512 @@
+<!--
+
+   Copyright (c) 2017, the Perspective Authors.
+
+   This file is part of the Perspective library, distributed under the terms of
+   the Apache License 2.0.  The full license can be found in the LICENSE file.
+
+-->
+
+<template id="perspective-viewer">
+    <div id="app">
+      <div id="app_header">
+
+        <div id="pivot_header_container" class="pivot-header-container navbar navbar-inverse navbar-fixed-top hidden" role="navigation">
+            <div class="pivot_header_content">
+                <div class="pivot_header_item">
+
+                  <div class="pivot-navbar-header viz-navbar-header">
+                    <a class="pivot-navbar-brand" href="javascript: void(0)"></a>
+                  </div>
+                  <div class="pivot-navbar-source">
+                      <input type="text" value="AZ_short.css" class="header-source-name" />
+                  </div>
+                  <div class="flex-spacer"></div>
+                  <div class="pivot-general-settings">
+                    <user-menu>
+                      <div class="user-wrapper dropdown">
+                        <div class="small-avatar-toggle dropdown-toggle random-color" aria-haspopup="true" aria-expanded="false" data-initials="D"></div>
+                        <div class="user-card dropdown-menu-right dropdown-menu">
+                          <div class="card-content">
+                            <div class="user-avatar-wrapper">
+                              <div class="user-avatar random-color"> </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </user-menu>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        <perspective-formula-bar id="formula-bar"></perspective-formula-bar>
+      </div>
+      <div id="app_content">
+          <div id="menubar">
+              <div id="copy_button" class="noselect button" title="Copy"></div>
+              <div id="download_button" class="noselect button" title="Download"></div>
+              <div id="reset_button" class="noselect button" title="Reset"></div>
+          </div>
+
+          <div class="column noselect">
+
+              <div id="pivot_file_zone_container" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                  <div class="pivot_file_zone_content">
+                      <div class="pivot_file_zone_item">
+                          <form>
+                          <span>You can Drag a file anywhere in the grid to automatically ingest it, or </span>
+                          <label class="button" for="pivot_input_file">Add a source</label>
+                          <input type="file" id="pivot_input_file" accept="text/csv, .xls, .xlsx, .zip">
+                          </form>
+                      </div>
+                  </div>
+              </div>
+
+              <div id="pivot_chart_container">
+                  <div class="plugin_information plugin_information--warning hidden" id="plugin_information--size">
+                      <span class="plugin_information__text" id="plugin_information_count">Estimated rendering</span>
+                      <span class="plugin_information__action">Continue to Render</span>
+                      <span class="plugin_information__action plugin_information__action--dismiss">Don't Show Again</span>
+                  </div>
+                  <div id="pivot_chart"></div>
+              </div>
+
+              <div id="pivot_tabs_bar" class="no-source-loaded hidden">
+                <div id="tabs_bar_content">
+                  <div id="tabs_bar_progress" class="progress-content hidden">
+                    <div class="progress no-overflow"><div id="tabs_bar_progress_bar" class="bar"></div></div>
+                  </div>
+                  <div id="pivot_tabs_bar_msg" class="status_bar_item"></div>
+                  <div class="flex-spacer"></div>
+                  <div class="status-bar-group">
+                      <div id="pivot_tabs_bar_source" class="status_bar_item">Source: AZ_short.csv, added 12 mins ago</div>
+                      <div id="pivot_tabs_bar_autoquery" class="status_bar_item">Auto-Query: On</div>
+                      <div id="pivot_tabs_bar_dimension" class="status_bar_item">31R x 12C</div>
+                      <div id="pivot_tabs_bar_avg" class="status_bar_item hidden">Average: 14</div>
+                      <div id="pivot_tabs_bar_count" class="status_bar_item">Count: 14</div>
+                      <div id="pivot_tabs_bar_sum" class="status_bar_item hidden">Sum: 14</div>
+                      <div id="pivot_tabs_bar_zoom" class="status_bar_item">
+                        <button id="pivot_zoom_out_btn"><span>-</span></button><input id="zoomer" type="range" min="0.5" max="4" value="1" step="0.1" class="zoom-slider"><button  id="pivot_zoom_in_btn"><span>+</span></button><div id="zoomer_percent" class="status_bar_item">100%</div>
+                      </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+
+          </div>
+
+
+          <div id='side_panel' class="column fixed noselect">
+            <div id="resize_panel_shield" class="hidden"></div>
+
+              <div class="sp-header-container">
+                  <div class="sp-header-content">
+                    <div class="sp-header-title">Display</div>
+                    <div id="config_button_newdesign" class="hidden">
+                      <div class="docs-icon inline-block">
+                        <div class="icon-img-container icon-img icon-img-newdesign"></div>
+                      </div>
+                    </div>
+                    <div class="sp-header-button-close"><button id="config_button_x" type="button">X</button></div>
+                  </div>
+              </div>
+
+              <div id="sp_perspective" class="sp-content-container">
+                <div class="sp-row-title">Display As</div>
+
+                <div class="sp-row-grid">
+                    <div class="sp-row-grid-icon">
+                      <div class="docs-icon inline-block">
+                        <div class="icon-img-container icon-img icon-img-grid"></div>
+                      </div>
+                    </div>
+                    <div id="vis_selector_container">
+                        <select id="vis_selector">
+                        </select>
+                    </div>
+                </div>
+                <div class="flex-break"></div>
+                <div class="sp-row-available-fields">
+                    <div class="sp-row-available-fields-title">
+                      <div class="fields-title-checkbox">
+                        <label class="checkbox-container">
+                          <input id="checkall_fields" type="checkbox" name="checkall_fields"> <span id="checkall_fields_checkmark" class="checkmark checkmark-indeterminate"></span>
+                        </label>
+                      </div>
+                      <div class="fields-title">
+                        Available Fields
+                      </div>
+                      <div class="fields-title-sort">
+                      </div>
+                    </div>
+                    <div class="sp-row-available-fields-search">
+                      <div id="search_fields_icon" class="docs-icon inline-block search-icon-inside-input">
+                        <div class="icon-img-container icon-img icon-img-search"></div>
+                      </div>
+                      <input id="search_fields" name="search_fields" type="text" value="" placeholder="Search fields">
+                      <!--<span class="inline-block">Search fields</span>-->
+                    </div>
+                </div>
+                <div class="flex-break"></div>
+
+                <div id="resize_panel_container" class="resize_panel_container">
+
+                <div id="available_fields_container" class="sp-row-available-fields-container">
+                  <div id="available_fields_columns" >
+                  </div>
+                </div>
+                <div class="flex-break"></div>
+
+
+                <div id="resize_panel_bottom_content" class="resize_panel_bottom_content">
+
+
+
+                <div id="powers" class="powers"></div>
+                <div class="flex-break"></div>
+                <div id="row_col_blocks" class="sp-row-pivots no-margin-top">
+                    <div class="sp-row-rowpivot">
+                        <div class="sp-row-pivot-title">Rows</div>
+                        <div id="row_pivot_caution" class="docs-icon inline-block hidden">
+                          <div class="icon-img-container icon-img icon-img-caution"></div>
+                        </div>
+                        <span id="transpose_button" class="sp-transpose-button">&#x21C4;</span>
+                        <!--<div id="row_pivots_container" class="splg-container">-->
+                          <div id="row_pivots" class="splg-container">
+                              <div class="psp-text-field">
+                                  <ul class="psp-text-field__input" for="row-pivots"></ul>
+                                  <label for="row_pivots"></label>
+                              </div>
+                          </div>
+                        <!--</div>-->
+                    </div>
+                    <div class="sp-row-columnpivot">
+                        <div class="sp-row-pivot-title">Columns</div>
+                        <div id="column_pivot_caution" class="docs-icon inline-block hidden">
+                          <div class="icon-img-container icon-img icon-img-caution"></div>
+                        </div>
+                        <!--<div class="splg-container">-->
+                          <div id="column_pivots" class="splg-container">
+                              <div class="psp-text-field">
+                                  <ul class="psp-text-field__input" for="column-pivots"></ul>
+                                  <label for="column_pivots"></label>
+                              </div>
+                          </div>
+                        <!--</div>-->
+                    </div>
+                </div>
+                <div class="flex-break"></div>
+                <div id="value_filter_blocks" class="sp-row-pivots">
+                    <div class="sp-row-rowpivot">
+                        <div class="sp-row-pivot-title">Values</div>
+                        <div id="value_pivot_caution" class="docs-icon inline-block hidden">
+                          <div class="icon-img-container icon-img icon-img-caution" icon-for="value_pivot_caution"></div>
+                        </div>
+                        <!--<div class="splg-container">-->
+                          <div id="value_pivots" class="splg-container">
+                              <div class="psp-text-field">
+                                  <ul class="psp-text-field__input" for="value-pivots"></ul>
+                                  <label for="value_pivots"></label>
+                              </div>
+                          </div>
+                        <!--</div>-->
+                    </div>
+                    <div class="sp-row-columnpivot">
+                        <div class="sp-row-pivot-title">Filters</div>
+                        <div id="filter_caution" class="docs-icon inline-block hidden">
+                          <div class="icon-img-container icon-img icon-img-caution"></div>
+                        </div>
+                        <!--<div class="splg-container">-->
+                          <div id="filters" class="splg-container">
+                              <div class="psp-text-field">
+                                  <ul class="psp-text-field__input" for='filters'></ul>
+                                  <label for="filters"></label>
+                              </div>
+                          </div>
+                        <!--</div>-->
+                    </div>
+                </div>
+
+                <div class="flex-break"></div>
+                <div class="sp-row-title sort hidden">Sort</div>
+
+                <div class="flex-break hidden"></div>
+                <div class="sp-row-sort-container hidden">
+                    <div class="sp-row-sort-content">
+
+                      <div id="sort">
+                          <div class="psp-text-field">
+                              <ul class="psp-text-field__input" for="sort"></ul>
+                              <label for="sort"></label>
+                          </div>
+                      </div>
+
+                    </div>
+                </div>
+                <!--
+                <div class="sp-row-others hidden">
+                    <span>Search</span>
+                    <div id="searchs">
+                        <div class="psp-text-field">
+                            <input type="text" class="psp-text-field__input-searchs" for='searchs'></input>
+                            <label for="searchs"></label>
+                        </div>
+                    </div>
+                </div>
+                -->
+                <div class="sp-row-others hidden">
+                  <!--<div id="auto_query_group hidden">
+                      <span>Auto Query: </span>
+                      <select id="vis_auto_query"></select>
+                      <button id="run-query-button" class="psp-cc__button" disabled>Run Query</button>
+                  </div>-->
+                  <div id="page_item_group">
+                      <span>Rows per page: </span>
+                      <select id="vis_page_item"></select>
+                  </div>
+                  <div id="pagination_group">
+                      <span>Pages: </span>
+                      <div id="pagination_action_group">
+                          <button id="pagination-back-button" class="psp-cc__button">&#60;</button>
+                          <span id="pagination_page_number">1</span>
+                          <button id="pagination-forward-button" class="psp-cc__button">&#62;</button>
+                      </div>
+                  </div>
+                  <div id="vis_undo_redo_group">
+                      <span>Redo/Undo: </span>
+                      <div id="pagination_action_group">
+                          <button id="vis-undo-button" class="psp-cc__button" title="Undo">&#10554;</button>
+                          <button id="vis-redo-button" class="psp-cc__button" title="Redo">&#10555;</button>
+                      </div>
+                  </div>
+                  <div id="max_col_group">
+                      <span>Max Cols: </span>
+                      <select id="vis_max_col" class="hidden"></select>
+                      <div class="max-col-right-item">
+                        <span>2000</span>
+                      </div>
+                  </div>
+                </div>
+                <div class="sp-row-others hidden">
+                  <div id="max_row_group">
+                      <span>Max Rows: </span>
+                      <select id="vis_max_row"></select>
+                  </div>
+                </div>
+                <!--<div id="pivot_view_group" class="sp-row-others hidden">
+                    <span>Pivot View: </span>
+                    <select id="vis_pivot_view"></select>
+                </div>-->
+                <div class="sp-row-others hidden">
+                  <div>
+                      <span>Primary: </span>
+                      <select id="vis_pk"></select>
+                  </div>
+                </div>
+                <div class="sp-row-others hidden">
+                  <div id="side_panel__actions" style="visibility: hidden">
+                      <div id="add-computed-column" class="side_panel-action"><span class="psp-icon psp-icon__add"></span><span class="psp-title__columnName">New Column</span></div>
+                  </div>
+                  <perspective-computed-column></perspective-computed-column>
+                </div>
+                <div id="side_panel__exports" class="sp-row-others hidden">
+                    <div id="add-export-csv" class="side_panel-action"><span class="psp-icon psp-icon__add"></span><span class="psp-title__columnName">Export CSV</span></div>
+                    <div id="add-export-excel" class="side_panel-action"><span class="psp-icon psp-icon__add"></span><span class="psp-title__columnName">Export Excel</span></div>
+                    <div id="add-export-json" class="side_panel-action"><span class="psp-icon psp-icon__add"></span><span class="psp-title__columnName">Export JSON</span></div>
+                </div>
+
+
+                <div class="flex-break"></div>
+                <div class="spg-actions">
+                    <div class="spg-row">
+                        <button type="button" name="run_auto_query" id="run_auto_query" class="hidden"><span>Run Query</span></button>
+                        <!--<button type="button" name="btn_cancel" id="btn_cancel"><span>Cancel</span></button>-->
+                    </div>
+                    <div class="spg-row">
+                        <div class="spg-checklist">
+                            <label class="checkbox-container">
+                              <input id="auto_query_checkbox" type="checkbox" name="cb_autoquery" checked="checked"> <span class="checkmark"></span>
+                            </label>
+                            <span class="checklist-text">Auto Query</span>
+                        </div>
+                    </div>
+                    <div class="spg-row">
+                        <div class="spg-checklist">
+                            <label class="checkbox-container">
+                              <input id="flatten_agg_view" type="checkbox" name="cb_flatten_agg"> <span class="checkmark"></span>
+                            </label>
+                            <span class="checklist-text">Flatten aggregated results</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                </div>
+
+
+
+
+                </div>
+
+
+
+                <div style="display:none">
+                  <div id='top_panel'>
+                  </div>
+                  <div id="columns_container" style="visibility: hidden">
+
+                      <div id='divider'></div>
+                      <div id="sub_columns">
+                      </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+          </div>
+
+          <div id="psp_popup_outbound" class="hidden">
+          <div id="psp_popup" class="dialog moveable hidden">
+            <div id="psp_popup_container" class="row-settings-container">
+
+              <div id="psp_popup_header_container" tabindex="0" class="sp-header-container titlebar">
+                  <div id="psp_popup_header_content" class="sp-header-content">
+                    <div id="psp_popup_title" class="sp-header-title"></div>
+                    <div id="psp_popup_button_x_container" class="sp-header-button-close"><button id="psp_popup_button_x" type="button" class="close-btn-x">X</button></div>
+                  </div>
+              </div>
+
+              <div id="psp_popup_data">
+
+              </div>
+
+            </div>
+          </div>
+          </div>
+
+          <div id="search_container" class="search_container hidden">
+            <div id="searchs" class="search_content">
+              <div class="search_outbox">
+                <div class="docs-icon inline-block icon-inside-input left-icon" style="display:none">
+                  <div class="icon-img-container icon-img icon-img-search"></div>
+                </div>
+                <div id="search_icon" class="svg-search-icon left-icon">
+                  <svg height="16" width="16" viewBox="-1 -2 22 22">
+                    <use xlink:href="#searchIco">
+                      <svg id="searchIco"><path d="M13.199 12.195l4.845 4.845a.704.704 0 0 1-.996.995l-4.844-4.844a7.305 7.305 0 1 1 .995-.997zm-5.644 1.257a5.897 5.897 0 1 0 0-11.794 5.897 5.897 0 0 0 0 11.794z" fill-rule="evenodd"></path></svg>
+                    </use>
+                  </svg>
+                </div>
+
+                <input id="search_input_id" type="text" class="psp-text-field__input-searchs" placeholder="Search across all fields"></input>
+                <div id="search_option_icon" data="three-dots" class="docs-icon inline-block icon-inside-input right-icon">
+                  <div data="three-dots" class="icon-img-container icon-img icon-img-3dots"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--<div id="config_button" class="noselect button">
+            <i class="arrow"></i>
+          </div>-->
+
+          <div id="config_button" class="brC-dA-I-Jw brC-dA-I-Jw-qk" aria-label="Toggle side panel" role="navigation">
+            <div id="config_button_container" class="aT5-aOt-I brC-dA-I aT5-aOt-I-Jp" aria-pressed="true" role="button" style="user-select: none;" aria-label="Show side panel" tabindex="0">
+              <div class="aT5-aOt-I-JX-atM"></div>
+              <div class="aT5-aOt-I-JX-Jw">
+                <svg class="aT5-aOt-I-JX" version="1.1" id="Layer_1" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve" fill="#5F6368">
+                  <path d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"></path><path fill="none" d="M0,0h24v24H0V0z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div id="config_button_tooltip" class="hidden"><span>Show settings panel</span></div>
+          <div id="cb_run_auto_query_tooltip" class="">
+              <button type="button" id="cb_run_auto_query" class="run_auto_query hidden"><span>Run Query</span></button>
+          </div>
+
+          <div id="psp_tooltip" class="psp-tooltip hidden">
+            <div id="psp_tooltip_container" class="tooltip-container">
+
+              <div class="tooltip-header">
+                  <div id="psp_tooltip_title" class="tooltip-title"></div>
+              </div>
+
+              <div class="tooltip-content">
+                <div id="psp_tooltip_data" class="tooltip-data"></div>
+              </div>
+
+            </div>
+          </div>
+
+          <div id='drop_target'>
+              <div id='drop_target_inner'>
+
+              </div>
+          </div>
+
+          <slot></slot>
+      </div>
+    </div>
+
+
+    <div class="alertify-notifier ajs-bottom ajs-left hidden">
+        <div class="content">
+            <span><i class="fa fa-lg fa-warning notification"></i><span>Error</span></span>
+            <a class="close"><svg x="0px" y="0px" width="12px" height="12px" viewBox="0 0 10 10" focusable="false"><polygon class="a-s-fa-Ha-pa" fill="#FFFFFF" points="10,1.01 8.99,0 5,3.99 1.01,0 0,1.01 3.99,5 0,8.99 1.01,10 5,6.01 8.99,10 10,8.99 6.01,5 "></polygon></svg></a>
+        </div>
+    </div>
+    <div id="pivot_drop_file_area_highlight" class="upload-drop"><div class="backdrop"></div><div class="message no-overflow">Drop files to automatically <span class="folder">ingest</span> data</div></div>
+    <div id="pivot_drop_file_area_error" class="upload-drop-not-allow"><div class="backdrop"></div><div id="pivot_error_message_id" class="message no-overflow">Multiple files currently not supported</div></div>
+    <div id="pivot_ingesting_data_percentage" class="ingesting-data">
+        <div class="backdrop"></div>
+        <div id="pivot_progress_content" class="progress-content">
+            <div class="message no-overflow"><span id="pivot_ingesting_label">Loading data...</span></div>
+            <div class="progress no-overflow"><div id="pivot_ingesting_bar" class="bar"></div></div>
+            <div class="message no-overflow">
+                <div id="pivot_loading_data_cancel" class="cancel">X</div>
+                <div id="pivot_loading_data_finalizing" class="finalizing hidden">Finalizing...</div>
+            </div>
+        </div>
+    </div>
+    <div id="pivot_querying_percentage" class="ingesting-data">
+        <div class="backdrop"></div>
+        <div class="progress-content">
+            <div class="message no-overflow"><span id="pivot_querying_label">Running your query...</span></div>
+            <div class="progress no-overflow"><div id="pivot_querying_bar" class="bar"></div></div>
+            <div class="message no-overflow">
+                <div id="pivot_querying_cancel" class="cancel">X</div>
+            </div>
+        </div>
+    </div>
+    <div id="psp_popup_sheet" class="hidden">
+      <div class="backdrop"></div>
+      <div id="psp_popup_sheet_container" class="psp-popup-sheet-container">
+
+        <div class="sp-header-container">
+            <div class="sp-header-content">
+              <!--<div class="sp-header-button-back"><button id="psp_popup_sheet_button_back" type="button" class="close-btn-x">Back</button></div>-->
+              <div id="psp_popup_sheet_back_container" class="sheet-back-container hidden">
+                <div class="docs-icon inline-block">
+                  <div class="icon-img-container icon-img icon-img-back zip-btn-back"></div>
+                </div>
+              </div>
+              <div id="psp_popup_sheet_title" class="sp-header-title"></div>
+              <div class="sp-header-button-close"><button id="psp_popup_sheet_button_x" type="button" class="close-btn-x">X</button></div>
+            </div>
+        </div>
+
+        <div id="psp_popup_sheet_data">
+
+        </div>
+
+      </div>
+    </div>
+
+    <perspective-formula-helper id="formula-helper"></perspective-formula-helper>
+</template>

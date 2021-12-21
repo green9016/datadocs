@@ -1,0 +1,44 @@
+{
+    "name": "@jpmorganchase/perspective-webpack-plugin",
+    "version": "0.2.21",
+    "description": "Perspective.js Webpack Plugin",
+    "main": "index.js",
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "src/**/*",
+        "index.js"
+    ],
+    "scripts": {},
+    "jest": {},
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jpmorganchase/perspective"
+    },
+    "author": "",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "@webpack-contrib/schema-utils": "^1.0.0-beta.0",
+        "arraybuffer-loader": "^1.0.2",
+        "base64-font-loader": "0.0.4",
+        "bufferutil": "~3.0.0",
+        "clean-css-cli": "4.2.1",
+        "clean-css-loader": "^1.1.0",
+        "core-js": "^2.5.7",
+        "css-loader": "^0.28.7",
+        "extract-text-webpack-plugin": "^3.0.2",
+        "file-loader": "^2.0.0",
+        "html-loader": "^0.5.1",
+        "less": "^3.9.0",
+        "less-loader": "^4.1.0",
+        "source-map-loader": "^0.2.4",
+        "string-replace-loader": "^2.1.1",
+        "style-loader": "^0.18.2",
+        "tslib": "^1.9.3",
+        "worker-loader": "^2.0.0"
+    },
+    "peerDependencies": {
+        "webpack": ">=3.5 <4"
+    }
+}

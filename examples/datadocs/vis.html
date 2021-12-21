@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Datadocs</title>
+  <link rel="shortcut icon" href="static/img/favicon.ico">
+
+  <!--<link rel="stylesheet" type="text/css" href="build.css"/>-->
+  <script src="perspective.view.js"></script>
+  <script src="hypergrid.plugin.js"></script>
+  <script src="highcharts.plugin.js"></script>
+  <script src="perspective.js"></script>
+  <!--<link rel='stylesheet' href="csv.css" is="custom-style">
+  <link rel='stylesheet' href="material.css" is="custom-style">
+  <link rel='stylesheet' href="custom.css" is="custom-style">-->
+
+</head>
+
+<body class="application">
+
+  <div ui-view class style>
+    <div ui-view class style>
+
+      <div class="navbar-wrapper ingest-navbar-wrapper" ng-class="isVizMode() ? 'viz-navbar-wrapper' : 'ingest-navbar-wrapper'">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="navbar-header viz-navbar-header">
+            <a class="navbar-brand" ui-sref="main.landing.my_data" href="index.html"></a>
+          </div>
+          <div class="flex-spacer"></div>
+          <div class="general-settings">
+            <user-menu>
+              <div class="user-wrapper dropdown" uib-dropdown="">
+                <div class="small-avatar-toggle dropdown-toggle default random-color" ng-class="{'default random-color': !avatar_url}" ng-attr-data-initials="{{!avatar_url ? getUserInitials() : ''}}" uib-dropdown-toggle="" ng-style="avatar_url &amp;&amp; {'background': 'url(' + avatar_url + ') center center / cover no-repeat'}" aria-haspopup="true" aria-expanded="false" data-initials="T"></div>
+                <div class="user-card dropdown-menu-right dropdown-menu" uib-dropdown-menu="">
+                  <div class="card-content">
+                    <div class="user-avatar-wrapper">
+                      <div class="user-avatar random-color" ng-class="{'random-color': !avatar_url}" ng-attr-data-initials="{{!avatar_url ? getUserInitials() : ''}}" ng-style="avatar_url &amp;&amp; {'background': 'url(' + avatar_url + ') center center / cover no-repeat'}" data-initials="T"> </div>
+                      <input type="file" id="change-avatar-file" nv-file-select="" uploader="avatarUploader" style="display:none">
+                      <label for="change-avatar-file" class="change-avatar">Change </label>
+                    </div>
+                    <div class="details">
+                      <div class="user-fullname">Thomas</div>
+                      <div class="user-email">adduser@localhost.com</div>
+                      <div ng-if="isFreeUser()">
+                        <div class="free-user"> Your plan: <b>free</b> <span class="explanatory">(100k limit)</span><br> </div>
+                      </div>
+                      <div class="my-settings">
+                        <a ng-click="showMySettingPage()" class="user-settings toggle-settings-dropdown">My Settings</a>
+                      </div>
+                      <a ng-click="signOut()" id="logout-button" class="button btn btn-filters btn-filters-blue logout-button"> Log Out </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </user-menu>
+          </div>
+        </nav>
+      </div>
+
+      <div id="drop-area">
+          <form class="my-form">
+              <p>Upload a CSV file by dragging from your desktop and dropping onto the dashed region.</p>
+              <p>(Data is processed in browser, and never sent to any server).</p>
+              <input type="file" id="fileElem" multiple accept="text/csv">
+              <label class="button" for="fileElem">Select a file</label>
+          </form>
+      </div>
+
+      <div id="wrapper" class="ng-isolate-scope viz-page">
+        <div id="page-content-wrapper" ng-class="isVizMode() ? 'viz-content-wrapper' : 'ingest-content-wrapper'" class="ingest-content-wrapper">
+          <div class="page-content">
+
+            <div static-include="static/templates/include/viz-pages/viz.html"></div>
+            <div static-include="static/templates/include/viz-pages/ingest.html">
+              <div ng-if="isIngestMode()" id="search-results" class="widget resizable-wrapper" style="padding-left: 0px;">
+                <div class="results page-content-wrapper">
+                  <perspective-viewer></perspective-viewer>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div id="tabs-bar">
+              <div id="toggle-widgets" ng-if="!isViewOnly" uib-tooltip="Your must first save your data to apply Filters" tooltip-enable="!isVizMode() &amp;&amp; !ingestDataSummary.queryMode" tooltip-placement="top" tooltip-popup-delay="250" tooltip-append-to-body="true" tooltip-class="main-page-tooltip"> <button type="button" ng-click="toggleRightFilters()" ng-disabled="(isIngestMode() &amp;&amp; !isShowTables()) || isMobileView()" ng-class="{'active': isShowFilters, 'disabled': (isIngestMode() &amp;&amp; !isShowTables()) || isMobileView()}" disabled="disabled" class="disabled" style=""> <i class="fa fa-filter"></i> Filters </button>
+              </div>
+
+              <div id="tabs-bar-content">
+                <div class="inline-block dropup pull-left add-tab-wrapper dropdown" ng-if="!isViewOnly" uib-dropdown=""> <div class="tab-button add-tab-button" ng-click="tabsSection.addNewTab()" uib-tooltip="Add Sheet" tooltip-placement="top" tooltip-popup-delay="250" tooltip-append-to-body="true" tooltip-class="main-page-tooltip"> <span>+</span> </div> <ul class="dropdown-menu tabs-dropdown" style="left:0;right:auto" uib-dropdown-menu="" role="menu"> <li role="menuitem"><a ng-  click="tabsSection.addNewTab()">Create New</a></li> <li role="menuitem"><a ng-click="tabsSection.duplicateTab(false)">Duplicate Sheet</a></li> </ul>
+                </div>
+
+                <div id="tabs-arrows" class="inline-block hidden"> <button type="button" class="tab-button" ng-click="moveTabs('left')"><i class="fa fa-arrow-left"></i></button> <button type="button" class="tab-button" ng-click="moveTabs('right')"><i class="fa fa-arrow-right"></i></button> </div> <div class="clearfix"></div> </div> </div>
+
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div id="main-loader" page-loader></div>
+    <script>
+        window.addEventListener("WebComponentsReady", function () {
+            fileName = window.location.hash.substr(1)
+            if(!fileName){
+              //fileName = "investments_short.csv";
+
+              // Enable drag drop area and disable Datadocs area
+              document.getElementById("drop-area").style.display="block";
+              document.getElementById("wrapper").style.display="none";
+            }else{
+                // Disable drag drop area and enable Datadocs area
+                document.getElementById("drop-area").style.display="none";
+                document.getElementById("wrapper").style.display="block";
+
+                var url = './files/' + fileName;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.onload = function () {
+                    var table = perspective.worker().table(xhr.response);
+                    var elem = document.getElementsByTagName("perspective-viewer")[0];
+                    elem.load(table);
+                }
+
+                xhr.send(null);
+           }
+        });
+
+        window.addEventListener("WebComponentsReady", function() {
+            fileName = window.location.hash.substr(1)
+            if(!fileName){
+
+                var dropArea = document.getElementById("drop-area");
+                var input = document.getElementById("fileElem");
+
+                dropArea.addEventListener("dragenter", () => {}, false);
+                dropArea.addEventListener("dragleave", () => {}, false);
+                dropArea.addEventListener("dragover", () => {}, false);
+                dropArea.addEventListener("drop", x => console.log(x), false);
+
+                ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+                    dropArea.addEventListener(eventName, preventDefaults, false);
+                });
+
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                ["dragenter", "dragover"].forEach(function(eventName) {
+                    dropArea.addEventListener(eventName, highlight, false);
+                });
+                ["dragleave", "drop"].forEach(function(eventName) {
+                    dropArea.addEventListener(eventName, unhighlight, false);
+                });
+
+                function highlight() {
+                    dropArea.classList.add("highlight");
+                }
+
+                function unhighlight() {
+                    dropArea.classList.remove("highlight");
+                }
+
+                dropArea.addEventListener("drop", handleDrop, false);
+
+                input.addEventListener("change", function() {
+                    handleFiles(this.files);
+                });
+
+                function handleDrop(e) {
+                    let dt = e.dataTransfer;
+                    let files = dt.files;
+
+                    handleFiles(files);
+                }
+
+                function handleFiles(files) {
+                    [...files].forEach(uploadFile);
+                }
+
+                function uploadFile(file) {
+                    let reader = new FileReader();
+                    reader.onload = function(fileLoadedEvent) {
+                        let txt = fileLoadedEvent.target.result;
+                        //const parent = dropArea.parentElement;
+                        //parent.removeChild(dropArea);
+                        //let psp = document.createElement("perspective-viewer");
+                        var psp = document.getElementsByTagName("perspective-viewer")[0];
+                        //parent.appendChild(psp);
+                        // Disable drag drop area and enable Datadocs area
+                        document.getElementById("drop-area").style.display="none";
+                        document.getElementById("wrapper").style.display="block";
+                        psp.load(txt);
+                    };
+                    reader.readAsText(file);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

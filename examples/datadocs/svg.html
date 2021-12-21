@@ -1,0 +1,117 @@
+<!--
+
+   Copyright (c) 2017, the Perspective Authors.
+
+   This file is part of the Perspective library, distributed under the terms of
+   the Apache License 2.0.  The full license can be found in the LICENSE file.
+
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <style>
+        .goog-menu{
+            user-select: none;
+            overflow-y: auto;
+            height: auto;
+            visibility: visible;
+            left: 583px;
+            top: 56px;
+
+            border: 1px solid transparent;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px 2px rgba(60,64,67,.15);
+            max-height: calc(100vh - 70px);
+
+            transition: opacity 0.218s;
+            background: #fff;
+            border: 1px solid #ccc;
+            border: 1px solid rgba(0,0,0,.2);
+            cursor: default;
+            font-size: 13px;
+            margin: 0;
+            outline: none;
+            padding: 6px 0;
+            position: absolute;
+        }
+
+        .docs-icon-img{
+            content: url(https://ssl.gstatic.com/docs/common/material_common_sprite108_grey_medium.svg)
+        }
+
+        .docs-icon-cut{
+            left: 0;
+            top: -3648px;
+        }
+
+        .goog-menuitem-icon .docs-icon-img-container{
+            height: 4888px;
+            position: absolute;
+            width: 40px;
+        }
+
+        .docs-icon-img:before{
+            content: url(jfk_sprite186.png)
+        }
+
+
+
+        .goog-menu .goog-menuitem{
+            padding: 6px 15px 6px 38px;
+        }
+
+        .docs-icon{
+            width: 18px;
+            height: 18px;
+            overflow: hidden;
+
+            position: absolute;
+            margin: 7px 8px 7px 12px;
+            left: 0;
+            top: 0;
+        }
+
+        /*.goog-menuitem{
+            color: #202124;
+            font-size: 14px;
+            letter-spacing: .2px;
+            line-height: 20px;
+            white-space: normal;
+            position: relative;
+        }*/
+
+        /*.docs-icon.goog-menuitem-icon{
+            position: absolute;
+            margin: 7px 8px 7px 12px;
+            left: 0;
+            top: 0;
+        }*/
+
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <div class="goog-menu goog-menu-vertical docs-material">
+        <div class="goog-menuitem apps-menuitem" role="menuitem" style="user-select: none;" id=":2nd" aria-disabled="false">
+            <div class="goog-menuitem-content">
+                <div class="docs-icon goog-inline-block goog-menuitem-icon" aria-hidden="true">
+                    <div class="docs-icon-img-container docs-icon-img docs-icon-cut"></div>
+                </div>
+                <span class="goog-menuitem-label">Cut</span>
+                <span class="goog-menuitem-accel" aria-label="⌘X">⌘X</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

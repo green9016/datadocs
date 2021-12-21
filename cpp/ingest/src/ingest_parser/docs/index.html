@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ingest documentation &#8212; Ingest 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Ingest 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ingest-documentation">
+<h1>Ingest documentation<a class="headerlink" href="#ingest-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Ingest is a library to read various data sources, automatically detect format and present data as a table.
+Currently only parsing of text files in a CSV-like format is supported.</p>
+</div>
+<div class="section" id="csv-parser">
+<h2>CSV Parser<a class="headerlink" href="#csv-parser" title="Permalink to this headline">¶</a></h2>
+<p>The library can parse text files with rows of delimited values. File encoding, delimiters and other
+properties of the format are inferred automatically. First 1MB of the file is used for inferring.
+Data type is determined for each column based on data in the first 100 rows. Following data types are supported:</p>
+<ul class="simple">
+<li><p><em>string</em> - up to 1MB in length, longer strings are truncated.</p></li>
+<li><p><em>boolean</em> - values like <code class="docutils literal notranslate"><span class="pre">1</span></code>/<code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code>/<code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">Y</span></code>/<code class="docutils literal notranslate"><span class="pre">N</span></code> etc. can be used.</p></li>
+<li><p><em>integer</em> - 64 bit signed integers, range of values from <code class="docutils literal notranslate"><span class="pre">-9,223,372,036,854,775,808</span></code> to <code class="docutils literal notranslate"><span class="pre">9,223,372,036,854,775,807</span></code>.</p></li>
+<li><p><em>decimal</em> - <cite>IEEE 754</cite> double precision floating point format.</p></li>
+<li><p><em>date</em>, <em>time</em>, <em>datetime</em> - supports arbitrary formats which can be parsed by <cite>strptime</cite> function,
+e.g <code class="docutils literal notranslate"><span class="pre">Tuesday,</span> <span class="pre">22</span> <span class="pre">August</span> <span class="pre">2006</span> <span class="pre">06:30</span> <span class="pre">AM</span></code>, format is inferred automatically.</p></li>
+<li><p>lists - lists of values of the same type, values are comma-separated, list may be optionally enclosed in <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> .. <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>.</p></li>
+<li><p>special strings - <cite>XML</cite>, <cite>JSON</cite>, <cite>GeoJSON</cite> and <cite>WKT</cite> formats are detected but no special handling is applied.</p></li>
+</ul>
+<p>if a value cannot be converted to corresponding type then <code class="docutils literal notranslate"><span class="pre">null</span></code> value is produced and an error flag is set indicating
+what value in which column caused the error.</p>
+</div>
+<div class="section" id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inferrer_c</span>
+
+<span class="n">csv_file</span> <span class="o">=</span> <span class="s1">&#39;sample.csv&#39;</span>
+
+<span class="c1">#create a parser object, csv file name is passed as a byte string</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">inferrer_c</span><span class="o">.</span><span class="n">Parser</span><span class="p">(</span><span class="n">csv_file</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+<span class="c1">#obtain schema object prior to inferring in order to modify some parameters</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">get_schema</span><span class="p">()</span>
+
+<span class="c1">#treat &quot;NULL&quot; strings as null values</span>
+<span class="n">schema</span><span class="o">.</span><span class="n">remove_null_strings</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1">#infer file format</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">infer_schema</span><span class="p">()</span>
+
+<span class="c1">#check that inferring is successful</span>
+<span class="k">assert</span> <span class="n">schema</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">inferrer_c</span><span class="o">.</span><span class="n">SchemaStatus</span><span class="o">.</span><span class="n">STATUS_OK</span>
+
+<span class="c1">#inferred information is available from schema object</span>
+<span class="k">assert</span> <span class="n">schema</span><span class="o">.</span><span class="n">charset</span> <span class="o">==</span> <span class="s1">&#39;UTF-8&#39;</span>
+<span class="k">assert</span> <span class="n">schema</span><span class="o">.</span><span class="n">delimiter</span> <span class="o">==</span> <span class="s1">&#39;,&#39;</span>
+
+<span class="c1"># iterate schema object to get column objects</span>
+<span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="n">column</span><span class="o">.</span><span class="n">column_type</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+
+<span class="c1">#open csv file for parsing</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+
+<span class="c1">#iterate parser object to obtain rows from csv file</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">parser</span><span class="p">:</span>
+    <span class="c1">#row is a list of values</span>
+    <span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">row</span><span class="p">)</span>
+
+<span class="c1">#close the file</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-inferrer_c"></span><dl class="class">
+<dt id="inferrer_c.Parser">
+<em class="property">class </em><code class="sig-prename descclassname">inferrer_c.</code><code class="sig-name descname">Parser</code><a class="headerlink" href="#inferrer_c.Parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Main class of data inferrer and parser.</p>
+<p>Parser object may be iterated, it returns rows of data from the file as lists of typed values. Null values are represented by None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param filename</dt>
+<dd class="field-odd"><p>Path to the csv file.</p>
+</dd>
+<dt class="field-even">type filename</dt>
+<dd class="field-even"><p>bytes</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="inferrer_c.Parser.close">
+<code class="sig-prename descclassname">Parser.</code><code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inferrer_c.Parser.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Close the file after parsing.</p>
+<dl class="method">
+<dt id="inferrer_c.Parser.get_schema">
+<code class="sig-prename descclassname">Parser.</code><code class="sig-name descname">get_schema</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inferrer_c.Parser.get_schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns <a class="reference internal" href="#inferrer_c.Schema" title="inferrer_c.Schema"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Schema</span></code></a> object with the file’s properties.</p>
+<dl class="method">
+<dt id="inferrer_c.Parser.infer_schema">
+<code class="sig-prename descclassname">Parser.</code><code class="sig-name descname">infer_schema</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inferrer_c.Parser.infer_schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Infer file format properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>False if inferring failed.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="inferrer_c.Parser.open">
+<code class="sig-prename descclassname">Parser.</code><code class="sig-name descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inferrer_c.Parser.open" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Open the file before parsing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>False if opening failed.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="inferrer_c.Schema">
+<em class="property">class </em><code class="sig-prename descclassname">inferrer_c.</code><code class="sig-name descname">Schema</code><a class="headerlink" href="#inferrer_c.Schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Provides information about datasource properties.</p>
+<p>You can obtain schema from parser by calling <a class="reference internal" href="#inferrer_c.Parser.get_schema" title="inferrer_c.Parser.get_schema"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Parser.get_schema()</span></code></a>.
+Properties are filled by calling <a class="reference internal" href="#inferrer_c.Parser.infer_schema" title="inferrer_c.Parser.infer_schema"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Parser.infer_schema()</span></code></a>.</p>
+<p>The class acts as a list of <a class="reference internal" href="#inferrer_c.ColumnDefinition" title="inferrer_c.ColumnDefinition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ColumnDefinition</span></code></a> objects,
+<code class="docutils literal notranslate"><span class="pre">len(schema)</span></code> returns the number of columns, <code class="docutils literal notranslate"><span class="pre">schema[i]</span></code> returns i-th column definition,
+columns can be iterated by <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">column</span> <span class="pre">in</span> <span class="pre">schema:</span></code>.</p>
+<dl class="method">
+<dt id="inferrer_c.Schema.column_info">
+<code class="sig-prename descclassname">Schema.</code><code class="sig-name descname">column_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inferrer_c.Schema.column_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns a list of <a class="reference internal" href="#inferrer_c.ColumnDefinition.column_info" title="inferrer_c.ColumnDefinition.column_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ColumnDefinition.column_info()</span></code></a> for all columns.</p>
+<dl class="attribute">
+<dt id="inferrer_c.Schema.has_truncated_string">
+<code class="sig-prename descclassname">Schema.</code><code class="sig-name descname">has_truncated_string</code><a class="headerlink" href="#inferrer_c.Schema.has_truncated_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>parser truncated some string values</p>
+<p>The value is set to True if parser finds a string value longer than 1 MB which will be truncated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.Schema.remove_null_strings">
+<code class="sig-prename descclassname">Schema.</code><code class="sig-name descname">remove_null_strings</code><a class="headerlink" href="#inferrer_c.Schema.remove_null_strings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>treat some strings as null values.</p>
+<p>This property can be set to True prior to inferring. Then string values “NULL” and “null” will be interpreted as null values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.Schema.status">
+<code class="sig-prename descclassname">Schema.</code><code class="sig-name descname">status</code><a class="headerlink" href="#inferrer_c.Schema.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>indicates success or error status after inferring.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#inferrer_c.SchemaStatus" title="inferrer_c.SchemaStatus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SchemaStatus</span></code></a></p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="inferrer_c.CSVSchema">
+<em class="property">class </em><code class="sig-prename descclassname">inferrer_c.</code><code class="sig-name descname">CSVSchema</code><a class="headerlink" href="#inferrer_c.CSVSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#inferrer_c.Schema" title="inferrer_c.Schema"><code class="xref py py-class docutils literal notranslate"><span class="pre">inferrer_c.Schema</span></code></a></p>
+</dd></dl>
+
+<p>Provides information about CSV-like datasource properties.</p>
+<dl class="attribute">
+<dt id="inferrer_c.CSVSchema.charset">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">charset</code><a class="headerlink" href="#inferrer_c.CSVSchema.charset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>file encoding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.CSVSchema.comment">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">comment</code><a class="headerlink" href="#inferrer_c.CSVSchema.comment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>rows that start with comment string are ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.CSVSchema.comment_lines_skipped_in_parsing">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">comment_lines_skipped_in_parsing</code><a class="headerlink" href="#inferrer_c.CSVSchema.comment_lines_skipped_in_parsing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>how many comment lines were found while parsing the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.CSVSchema.delimiter">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">delimiter</code><a class="headerlink" href="#inferrer_c.CSVSchema.delimiter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>a character used to separate values in a row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.CSVSchema.escape_char">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">escape_char</code><a class="headerlink" href="#inferrer_c.CSVSchema.escape_char" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>a character used to escape special characters (removes special meaning from any following character),
+None if escaping is not used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.CSVSchema.first_data_row">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">first_data_row</code><a class="headerlink" href="#inferrer_c.CSVSchema.first_data_row" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>0-based index of the first row that contains data (ignoring header and comments).</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.CSVSchema.newline">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">newline</code><a class="headerlink" href="#inferrer_c.CSVSchema.newline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>a string used to separate rows in the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.CSVSchema.quote_char">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">quote_char</code><a class="headerlink" href="#inferrer_c.CSVSchema.quote_char" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>a character used to quote values, None if quoting is not used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="inferrer_c.CSVSchema.to_dict">
+<code class="sig-prename descclassname">CSVSchema.</code><code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inferrer_c.CSVSchema.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns a dict of schema properties with following elements:</p>
+<p><code class="docutils literal notranslate"><span class="pre">status</span></code>: <cite>status</cite> name,</p>
+<p><code class="docutils literal notranslate"><span class="pre">sourceType</span></code>: <code class="docutils literal notranslate"><span class="pre">CSV</span></code>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">delimiter</span></code>: <cite>delimiter</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">rowDelimiter</span></code>: <cite>newline</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">commentCharacter</span></code>: <cite>comment</cite> or None if comments not used,</p>
+<p><code class="docutils literal notranslate"><span class="pre">charset</span></code>: <cite>charset</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">quote</span></code>: <cite>quote_char</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">escape</span></code>: <cite>escape_char</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">firstDataRow</span></code>: <cite>first_data_row</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">commentLinesSkippedInParsing</span></code>: <cite>comment_lines_skipped_in_parsing</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">columnInfo</span></code>: <a class="reference internal" href="#inferrer_c.Schema.column_info" title="inferrer_c.Schema.column_info"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Schema.column_info()</span></code></a>.</p>
+<dl class="class">
+<dt id="inferrer_c.ColumnDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">inferrer_c.</code><code class="sig-name descname">ColumnDefinition</code><a class="headerlink" href="#inferrer_c.ColumnDefinition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Provides information about a data column.</p>
+<p><a class="reference internal" href="#inferrer_c.Schema" title="inferrer_c.Schema"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Schema</span></code></a> object acts as a list of ColumnDefinitions. Some autogenerated columns are added
+at the end of the column list:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">__rownum__</span></code> (type <cite>String</cite>, index <code class="docutils literal notranslate"><span class="pre">-1</span></code>): contains current row number.</p>
+<p><code class="docutils literal notranslate"><span class="pre">__count__</span></code> (type <cite>Integer</cite>, index <code class="docutils literal notranslate"><span class="pre">-2</span></code>): contains value <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">__error__</span></code> (type <cite>Error</cite>, index <code class="docutils literal notranslate"><span class="pre">-3</span></code>): contains a dict with information about errors in the current row, dict elements
+include:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">error_code</span></code>: integer error code,</p>
+<p><code class="docutils literal notranslate"><span class="pre">value</span></code>: original string value which caused the error.</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="method">
+<dt id="inferrer_c.ColumnDefinition.column_info">
+<code class="sig-prename descclassname">ColumnDefinition.</code><code class="sig-name descname">column_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inferrer_c.ColumnDefinition.column_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns a dict of column properties with following elements:</p>
+<p><code class="docutils literal notranslate"><span class="pre">initialIndex</span></code>: <cite>index</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">name</span></code>: <cite>column_name</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">is_list</span></code>: <cite>is_list</cite>,</p>
+<p><code class="docutils literal notranslate"><span class="pre">type</span></code>: dict with elements:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">dataType</span></code>: uppercase <cite>column_type</cite> name,</p>
+<p><code class="docutils literal notranslate"><span class="pre">pattern</span></code>: <cite>format</cite> or None if <cite>format</cite> is empty.</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="inferrer_c.ColumnDefinition.column_name">
+<code class="sig-prename descclassname">ColumnDefinition.</code><code class="sig-name descname">column_name</code><a class="headerlink" href="#inferrer_c.ColumnDefinition.column_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>column name. Unnamed columns have autogenerated names like <code class="docutils literal notranslate"><span class="pre">Field_1</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.ColumnDefinition.column_type">
+<code class="sig-prename descclassname">ColumnDefinition.</code><code class="sig-name descname">column_type</code><a class="headerlink" href="#inferrer_c.ColumnDefinition.column_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>type of values in the column or type of values in the list if <cite>is_list</cite> is True</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#inferrer_c.ColumnType" title="inferrer_c.ColumnType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ColumnType</span></code></a></p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.ColumnDefinition.format">
+<code class="sig-prename descclassname">ColumnDefinition.</code><code class="sig-name descname">format</code><a class="headerlink" href="#inferrer_c.ColumnDefinition.format" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>additional information about column type</p>
+<p>for <cite>Date</cite>, <cite>Time</cite>, <cite>Datetime</cite> columns: datetime format string (suitable for <cite>strptime</cite>).</p>
+<p>for <cite>String</cite> columns may be one of <code class="docutils literal notranslate"><span class="pre">XML</span></code>, <code class="docutils literal notranslate"><span class="pre">JSON</span></code>, <code class="docutils literal notranslate"><span class="pre">GeoJSON</span></code>, <code class="docutils literal notranslate"><span class="pre">WKT</span></code> if all strings
+are of corresponding format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.ColumnDefinition.index">
+<code class="sig-prename descclassname">ColumnDefinition.</code><code class="sig-name descname">index</code><a class="headerlink" href="#inferrer_c.ColumnDefinition.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>0-based column index in the original data source. Autogenerated columns have negative indexes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="inferrer_c.ColumnDefinition.is_list">
+<code class="sig-prename descclassname">ColumnDefinition.</code><code class="sig-name descname">is_list</code><a class="headerlink" href="#inferrer_c.ColumnDefinition.is_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>if True the column contains lists of elements of <cite>column_type</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="inferrer_c.ColumnType">
+<em class="property">class </em><code class="sig-prename descclassname">inferrer_c.</code><code class="sig-name descname">ColumnType</code><a class="headerlink" href="#inferrer_c.ColumnType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Type of values in a data column</p>
+<dl class="attribute">
+<dt id="inferrer_c.ColumnType.String">
+<code class="sig-name descname">String</code><a class="headerlink" href="#inferrer_c.ColumnType.String" title="Permalink to this definition">¶</a></dt>
+<dd><p>str (including special strings like XML, JSON)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inferrer_c.ColumnType.Boolean">
+<code class="sig-name descname">Boolean</code><a class="headerlink" href="#inferrer_c.ColumnType.Boolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inferrer_c.ColumnType.Integer">
+<code class="sig-name descname">Integer</code><a class="headerlink" href="#inferrer_c.ColumnType.Integer" title="Permalink to this definition">¶</a></dt>
+<dd><p>int</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inferrer_c.ColumnType.Decimal">
+<code class="sig-name descname">Decimal</code><a class="headerlink" href="#inferrer_c.ColumnType.Decimal" title="Permalink to this definition">¶</a></dt>
+<dd><p>float</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inferrer_c.ColumnType.Date">
+<code class="sig-name descname">Date</code><a class="headerlink" href="#inferrer_c.ColumnType.Date" title="Permalink to this definition">¶</a></dt>
+<dd><p>datetime.date</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inferrer_c.ColumnType.Time">
+<code class="sig-name descname">Time</code><a class="headerlink" href="#inferrer_c.ColumnType.Time" title="Permalink to this definition">¶</a></dt>
+<dd><p>datetime.time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inferrer_c.ColumnType.Datetime">
+<code class="sig-name descname">Datetime</code><a class="headerlink" href="#inferrer_c.ColumnType.Datetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>datetime.datetime</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inferrer_c.ColumnType.Error">
+<code class="sig-name descname">Error</code><a class="headerlink" href="#inferrer_c.ColumnType.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict with information about errors, only for special <code class="docutils literal notranslate"><span class="pre">__error__</span></code> column</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="inferrer_c.SchemaStatus">
+<em class="property">class </em><code class="sig-prename descclassname">inferrer_c.</code><code class="sig-name descname">SchemaStatus</code><a class="headerlink" href="#inferrer_c.SchemaStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Error values in <a class="reference internal" href="#inferrer_c.Schema.status" title="inferrer_c.Schema.status"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Schema.status</span></code></a> after inferring</p>
+<dl class="attribute">
+<dt id="inferrer_c.SchemaStatus.STATUS_OK">
+<code class="sig-name descname">STATUS_OK</code><a class="headerlink" href="#inferrer_c.SchemaStatus.STATUS_OK" title="Permalink to this definition">¶</a></dt>
+<dd><p>inferring successful</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="inferrer_c.SchemaStatus.STATUS_INVALID_FILE">
+<code class="sig-name descname">STATUS_INVALID_FILE</code><a class="headerlink" href="#inferrer_c.SchemaStatus.STATUS_INVALID_FILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>file format cannot be determined</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Ingest documentation</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#csv-parser">CSV Parser</a></li>
+<li><a class="reference internal" href="#tutorial">Tutorial</a></li>
+<li><a class="reference internal" href="#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Ingest 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, David Litwin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+    </div>
+  </body>
+</html>

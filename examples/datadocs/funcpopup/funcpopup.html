@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <!--meta http-equiv="refresh" content="1;url="-->
+    <title>Function Popup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="ZulNs" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="robots" content="all" />
+    <meta name="copyright" content="ZulNs" />
+  </head>
+
+  <body>
+    <h1>Function Poup</h1>
+
+    <!-- First Dialog Box -->
+    <link rel="stylesheet" href="popup.css" />
+    <link rel="stylesheet" href="formula.css" />
+    <script type="text/javascript" src="popup.js"></script>
+    <script type="text/javascript" src="formula-parser.js"></script>
+    <script type="text/javascript" src="fparser.js"></script>
+    <script type="text/javascript" src="funclist.js"></script>
+    <script type="text/javascript" src="formula.js"></script>
+
+    <p>
+      <input type="text" id="cell-editor" />
+    </p>
+
+
+    <div id="formula-list" class="formula-list" role="listbox">
+
+    </div>
+
+    <div id="formula-help-popup" class="formula-help-popup">
+
+    </div>
+<!-- 
+    <div
+      class="formula-list"
+      role="listbox"
+      id="formula-list-1"
+      style="opacity: 1; left: 45px; top: 272px; user-select: none;"
+      aria-expanded="true"
+    >
+      <div
+        class="formula-list-item active"
+        id="9qqi3b:2hp"
+        role="option"
+        style="user-select: none;"
+      >
+        <div class="formula-list-item-row" style="user-select: none;">
+          <div class="formula-list-item-func-name" style="user-select: none;">
+            CONCAT
+          </div>
+          <div class="formula-list-item-func-desc" style="user-select: none;">
+            Concatenation of two values
+          </div>
+        </div>
+      </div>
+      <div
+        class="formula-list-item"
+        id="9qqi3b:2hq"
+        role="option"
+        style="user-select: none;"
+      >
+        <div class="formula-list-item-row" style="user-select: none;">
+          <div class="formula-list-item-func-name" style="user-select: none;">
+            CONCATENATE
+          </div>
+          <div class="formula-list-item-func-desc" style="user-select: none;">
+            Appends strings to one another.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="formula-help-popup"
+      id="formula-help-popup-1"
+      tabindex="0"
+      style="visibility: visible; left: 45px; top: 397px; opacity: 1;"
+    >
+      <div
+        class="formula-help-popup-title"
+        role="tab"
+        aria-expanded="true"
+      >
+        <div class="formula-help-popup-header">
+          <span class="formula-help-popup-funcname">CONCAT</span
+          ><bdo dir="ltr"
+            ><span class="formula-help-popup-example-paren">(</span
+            ><span class="formula-help-popup-header-holder"
+              ><span
+                class="formula-arguments-help-parameter active"
+                dir="auto"
+                >value1</span
+              >,
+              <span class="formula-arguments-help-parameter" dir="auto"
+                >value2</span
+              ></span
+            ><span class="formula-help-popup-example-paren">)</span></bdo
+          >
+        </div>
+        <div class="formula-arguments-help-button-container">
+          <div
+            class="formula-arguments-help-button"
+            role="button"
+            tabindex="0"
+            data-tooltip="Minimize (F1)"
+            aria-label="Minimize (F1)"
+            style="user-select: none;"
+          >
+            <div class="waffle-formula-help-button-hover-container">
+              <div
+                class="docs-icon goog-inline-block waffle-arguments-help-toggle-icon"
+              >
+                <div
+                  class="docs-icon-img-container docs-icon-img docs-icon-down"
+                  aria-hidden="true"
+                >
+                  &nbsp;
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="waffle-arguments-help-close waffle-arguments-help-button"
+            role="button"
+            tabindex="0"
+            data-tooltip="Close (Shift-F1)"
+            aria-label="Close (Shift-F1)"
+            style="user-select: none;"
+          >
+            <div class="waffle-formula-help-button-hover-container">
+              <div class="docs-icon goog-inline-block ">
+                <div
+                  class="docs-icon-img-container docs-icon-img docs-icon-close"
+                  aria-hidden="true"
+                >
+                  &nbsp;
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="overflow: hidden;">
+        <div class="formula-help-popup-body">
+          <div
+            class="formula-help-popup-example"
+          >
+            <div class="formula-help-popup-section-title">Example</div>
+            <div class="formula-help-popup-example-holder">
+              <div class="formula-help-popup-example-formula">
+                <span class="formula-help-popup-example-func-name">CONCAT</span
+                ><bdo dir="ltr"
+                  ><span class="formula-help-popup-example-paren">(</span
+                  ><span class="formula-help-popup-example-args-holder"
+                    ><span
+                      class="formula-arguments-help-parameter active"
+                      dir="auto"
+                      >"hello"</span
+                    >,
+                    <span class="formula-arguments-help-parameter" dir="auto"
+                      >"goodbye"</span
+                    ></span
+                  ><span class="formula-help-popup-example-paren">)</span></bdo
+                >
+              </div>
+            </div>
+          </div>
+          <div class="formula-help-popup-content">
+            <div>
+              <div
+                class="formula-help-popup-about"
+              >
+                <div
+                  class="formula-help-popup-section-title"
+                >
+                  About
+                </div>
+                <span class="formula-help-popup-about-content"
+                  >Returns the concatenation of two values. Equivalent to the
+                  <span class="formula-arguments-help-code">&amp;</span>
+                  operator.</span
+                >
+              </div>
+              <hr />
+              <div class="formula-help-popup-parameter">
+                <div
+                  class="formula-help-popup-parameter-section active"
+                  aria-activedescendant="formula-param-name-0"
+                >
+                  <div
+                    class="formula-help-popup-parameter-section-title active"
+                    id="formula-param-name-0"
+                    aria-describedby="formula-param-description-0"
+                  >
+                    value1
+                  </div>
+                  <span
+                    class="formula-help-popup-parameter-section-content"
+                    id="formula-param-description-0"
+                    >The value to which
+                    <span class="formula-help-popup-parameter-code"></span>value2</span> will
+                    be appended.
+                  </span>
+                </div>
+                <div
+                  class="formula-help-popup-parameter-section"
+                >
+                  <div
+                    class="formula-help-popup-parameter-section-title"
+                    id="formula-param-name-1"
+                  >
+                    value2
+                  </div>
+                  <span
+                    class="formula-help-popup-parameter-section-content"
+                    id="formula-param-description-1"
+                    >The value to append to
+                    <span class="formula-help-popup-parameter-code">value1</span
+                    >.</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     -->
+  </body>
+</html>

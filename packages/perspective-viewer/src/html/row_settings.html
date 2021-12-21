@@ -1,0 +1,650 @@
+<template id="perspective-row-settings">
+
+    <div id="search_container_id" class="content-container hidden">
+
+      <div class="row">
+        <div class="row-full flex">Selected fields will be searched.</div>
+      </div>
+      <div id="nb_of_selected_fields_container" class="row">
+        <div id="nb_of_selected_fields" class="row-full flex">Currently searching <strong>all</strong> fields</div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div class="row fields-selectall-container">
+        <div class="flex row-fields-selectall">
+          <div class="fields-selectall" data="__SELECT_ALL__" class="flex" data-dname="__SELECT_ALL__">
+            <label class="checkbox-container">
+              <input type="checkbox" name="cb_allfields" id="field_input_checkall_id" />
+              <span class="checkmark" id="field_checkall_id_checkmark"></span>
+            </label>
+            <div class="checkbox-allfields-text" id="field_checkall_text_id">Select All</div>
+          </div>
+        </div>
+        <div class="row-full flex textbox">
+          <label id="search_f_icon" for="search_fields_input" class="docs-icon inline-block search-icon-inside-input">
+            <div class="icon-img-container icon-img icon-img-search"></div>
+          </label>
+          <input id="search_fields_input" placeholder="Search fields" />
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div class="row auto-height">
+        <div class="row-full filter-data-container">
+          <ul id="search_fields">
+          </ul>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+
+      <div class="row">
+        <div class="row-full flex">
+          <div class="flex">
+            Only search within visible fields:
+          </div>
+          <div class="flex">
+            <label class="switch-text-only">
+            	<input id="search_within_visible_fields" class="switch-input" type="checkbox" />
+            	<span class="switch-label" data-on="Yes" data-off="No"></span>
+            	<span class="switch-handle"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+    </div>
+
+    <div id="group_filter_container_id" class="content-container hidden">
+
+      <div class="row row-filter space-between">
+        <div class="row-left-half flex-start">
+          <div id="btn_clear_group_filter" class="btn-clear-filter row-right-auto">
+            <div class="filter-x-icon"><span>x</span></div>
+            <div class="docs-icon">
+              <div class="icon-img-container icon-img icon-img-filter"></div>
+            </div>
+            <div class="clear-filter">Clear Filter</div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="group_filter_data" class="group-filter-data">
+        <div class="row flex">
+          <div class="gf-filter flex"><strong></strong></div>
+          <div class="gf-operator flex">AND</div>
+          <div class="gf-filter flex"><strong></strong></div>
+        </div>
+        <div class="flex-break"></div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div class="row flex">
+        <div class="note-group-filter flex">Note: for more advanced filtering, use a calculated column</div>
+      </div>
+      <div class="flex-break"></div>
+
+    </div>
+
+    <div id="filter_container_id" class="content-container hidden">
+
+    </div>
+
+    <div id="advanced_container_id" class="content-container hidden">
+
+      <div id="adv_sort_asc" class="row row-hover">
+        <div class="row-left-half">
+          <div class="adv_sort_asc">
+            <div id="adv_sort_asc_highlight" class="flex">
+              <div class="sort-text-AZ">
+                <div class="sort-text-A sort-text-highlight">A</div>
+                <div class="sort-text-Z">Z</div>
+              </div>
+              <div class="sort-text-icon">
+                <div class="docs-icon toolbar-icon-arrow-down">
+                  <div class="icon-img-container icon-img icon-img-arrow-down"></div>
+                </div>
+              </div>
+            </div>
+            <div id="adv_sort_asc_title" class="sort-text-title">Sort A to Z</div>
+          </div>
+        </div>
+
+        <div id="adv_sort_content_asc" class="row-right-half hidden"></div>
+        <div id="adv_sort_content_asc_clear" class="row-right-half hidden">
+          <div id="adv_sort_asc_clear" class="full flex flex-end align-center hidden">
+            <div class="click-to-clear-sort">Click to clear sort</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="adv_sort_desc" class="row row-hover">
+        <div class="row-left-half">
+          <div class="adv_sort_desc">
+            <div id="adv_sort_desc_highlight" class="flex">
+              <div class="sort-text-AZ">
+                <div class="sort-text-A">Z</div>
+                <div class="sort-text-Z sort-text-highlight">A</div>
+              </div>
+              <div class="sort-text-icon">
+                <div class="docs-icon toolbar-icon-arrow-down">
+                  <div class="icon-img-container icon-img icon-img-arrow-down"></div>
+                </div>
+              </div>
+            </div>
+            <div id="adv_sort_desc_title" class="sort-text-title">Sort Z to A</div>
+          </div>
+        </div>
+
+        <div id="adv_sort_content_desc" class="row-right-half hidden"></div>
+        <div id="adv_sort_content_desc_clear" class="row-right-half hidden">
+          <div id="adv_sort_desc_clear" class="full flex flex-end align-center hidden">
+            <div class="click-to-clear-sort">Click to clear sort</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="advanced_sort_container" class="row" style="display: none">
+        <div class="row-left title-left" style="width: 70px">Sort by:</div>
+        <div id="adv_sort_content_default" class="row-right right-content-flex">
+          <!--<div id="adv_sort_by_content" class="select-dropdown hidden" style="/*width: 150px;*/">
+              <select id="adv_sort_by">
+              </select>
+          </div>
+          <div id="adv_sort_subtotal_group" class="select-dropdown full sort-sub hidden">
+            <select id="adv_sort_subtotal">
+            </select>
+          </div>-->
+          <div id="adv_sort_content" class="select-dropdown hidden">
+            <select id="adv_sort_dropdown"></select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="filter_component">
+
+      <div class="row row-filter space-between">
+        <div id="filter_title_container" class="row-left-half flex-start">
+          <div id="row_filter_title" class="filter-title">Filter</div>
+
+          <div class="row-right-auto hidden" id="adv_clear_filter">
+            <div class="filter-x-icon"><span>x</span></div>
+            <div class="docs-icon">
+              <div class="icon-img-container icon-img icon-img-filter"></div>
+            </div>
+            <div class="clear-filter">Clear Filter</div>
+          </div>
+
+        </div>
+        <div id="cfc_container" class="row-right-half flex-end hidden">
+          <div class="cfc-icon"></div>
+          <div id="cfc_link" class="custom-filter-link">Custom Filter</div>
+        </div>
+
+      </div>
+      <div class="flex-break"></div>
+
+      <div class="cfc-custom hidden">
+        <div id="advanced_filter_container" class="row">
+          <div class="row-left-half">
+            <!--<div class="select-dropdown" style="width: 150px;">
+                <select id="adv_filter_by">
+                </select>
+            </div>
+            <div id="adv_filter_subtotal_group" class="select-dropdown full sort-sub hidden">
+              <select id="adv_filter_subtotal">
+              </select>
+            </div>-->
+            <div class="select-dropdown full">
+              <select id="adv_filter_dropdown"></select>
+            </div>
+          </div>
+          <div class="row-right-half">
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div class="cfc-custom hidden">
+      <div id="adv_filter_left" class="row">
+
+        <div class="row-left-half">
+          <div class="select-dropdown full">
+              <select id="adv_nb_filter_operator">
+              </select>
+          </div>
+        </div>
+        <div id="adv_filter_right" class="row-right-half">
+          <div id="adv_nb_filter_period_container" class="select-dropdown filter-period hidden">
+              <select id="adv_nb_filter_period">
+              </select>
+          </div>
+          <div id="adv_nb_filter_operand_container" class="select-dropdown textbox full filter-operand relative">
+            <input id="adv_nb_filter_operand" placeholder="Value" />
+            <input id="adv_nb_filter_operand_date" class="hidden" placeholder="yyyy-mm-dd" />
+            <div id="adv_nb_filter_operand_date_calendar" class="calendar-icon hidden">
+              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20px" height="20px">
+                <path d="M 6 1 L 6 3 L 3 3 L 3 21 L 21 21 L 21 3 L 18 3 L 18 1 L 16 1 L 16 3 L 8 3 L 8 1 L 6 1 z M 5 8 L 19 8 L 19 19 L 5 19 L 5 8 z"/>
+              </svg>
+            </div>
+          </div>
+          <!--
+          <div id="adv_nb_filter_second_operand_container" class="select-dropdown textbox filter-operand margin-left-7px">
+            <input id="adv_nb_filter_second_operand" placeholder="Value" />
+          </div>
+          -->
+          <div id="adv_nb_filter_date_unit_container" class="select-dropdown filter-date-unit hidden">
+            <select id="adv_nb_filter_date_unit">
+            </select>
+          </div>
+          <div id="adv_nb_filter_top_n_type_container" class="select-dropdown last-dropdown top-n-dropdown hidden">
+            <select id="adv_nb_filter_top_n_type">
+            </select>
+          </div>
+        </div>
+
+      </div>
+      <div class="flex-break"></div>
+      <!--<div class="cfc-custom hidden">-->
+        <div id="adv_nb_filter_second_operand_container" class="row hidden">
+          <div class="row-left-half" id="adv_second_filter_left">
+            <div class="flex full flex-end">
+              <div class="flex">and</div>
+            </div>
+          </div>
+          <div class="row-right-half" id="adv_second_filter_right">
+            <div class="full textbox relative">
+              <input id="adv_nb_filter_second_operand" placeholder="Value" />
+              <input id="adv_nb_filter_second_operand_date" class="hidden"  placeholder="yyyy-mm-dd" />
+              <div id="adv_nb_filter_second_operand_date_calendar" class="calendar-icon hidden">
+                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20px" height="20px">
+                  <path d="M 6 1 L 6 3 L 3 3 L 3 21 L 21 21 L 21 3 L 18 3 L 18 1 L 16 1 L 16 3 L 8 3 L 8 1 L 6 1 z M 5 8 L 19 8 L 19 19 L 5 19 L 5 8 z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!--</div>-->
+      <div class="flex-break"></div>
+
+      </div>
+
+      <!--
+      <div class="row cfc-custom hidden">
+        <div class="row-full">
+          <div class="cfc-title">Multiple filters applied</div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+      <div class="row cfc-custom hidden">
+        <div class="row-full">Please use the <span>filters panel</span> to add, remove, or adjust filters for this field.</div>
+      </div>
+      <div class="flex-break"></div>
+      -->
+      <div class="row search-filter cfc-auto">
+        <div class="row-full textbox flex">
+          <input id="advanced_search_input" placeholder="Search" />
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div class="row auto-height cfc-auto">
+        <div class="row-full filter-data-container">
+          <ul id="suggestion_list">
+              <!--<li>
+                <label class="checkbox-container">
+                  <input type="checkbox" name="cb_filter"> <span class="checkmark"></span>
+                </label>
+                <div class="filter-data-item">(Select All)</div>
+              </li>
+              <li>
+                <label class="checkbox-container">
+                  <input type="checkbox" name="cb_filters"> <span class="checkmark"></span>
+                </label>
+                <div class="filter-data-item">abc</div>
+              </li>
+              <li>
+                <label class="checkbox-container">
+                  <input type="checkbox" name="cb_filters"> <span class="checkmark"></span>
+                </label>
+                <div class="filter-data-item">def</div>
+              </li>-->
+          </ul>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="filter_suggestion_warning_message" class="row cfc-auto hidden" style="height: 24px;">
+        <div class="row-full flex filter-warning">Limited to 1,000 filter options. Use search for more.</div>
+      </div>
+      <div class="flex-break"></div>
+
+
+      <div class="row">
+        <div class="row-left summarize-checklist cfc-custom hidden">
+          <div class="checklist">
+            <label class="checkbox-container">
+              <input id="adv_cb_auto_apply" type="checkbox" checked="checked"> <span class="checkmark"></span>
+            </label>
+            <span class="checklist-text">Auto Apply</span>
+          </div>
+        </div>
+        <div class="row-left flex small-font-size cfc-auto">
+          <div class="flex text-lighter nowrap">
+            Auto Apply:
+          </div>
+          <div class="flex">
+            <label class="switch-text-only">
+            	<input id="adv_cb_auto_apply_in_cfc_auto" class="switch-input" checked type="checkbox" />
+            	<span class="switch-label" data-on="on" data-off="off"></span>
+            	<span class="switch-handle"></span>
+            </label>
+          </div>
+        </div>
+        <div id="auto_query_actions" class="row-right advanced-actions hidden">
+          <div><button type="button" name="adv_cancel" id="adv_btn_cancel" class="btn-cancel"><span>Cancel</span></button></div>
+          <div><button type="button" name="adv_ok" id="adv_btn_ok" class="btn-primary"><span>Ok</span></button></div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+
+      </div>
+
+
+    </div>
+
+
+    <div id="basic_container_id" class="content-container">
+      <div class="row hidden">
+        <div class="row-left title">Source field:</div>
+        <div class="row-right source">
+          <div id='name' class="name hidden"></div>
+          <div id='alias_name' class="alias_name hidden"></div>
+          <div id="v_name" class="v_name hidden"></div>
+          <div id='source_field' class="alias_name"></div>
+          <!--
+          <div id="agg_level_container" class="hidden">
+            <select id="aggregate_level" class="agg-dropdown hidden">
+            </select>
+          </div>
+          -->
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="agg_level_container" class="row hidden" style="display: none">
+        <div class="row-left title">Date grouping:</div>
+        <div class="row-right source">
+          <div>
+            <select id="aggregate_level" class="agg-dropdown hidden">
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="custom_name_container" class="row">
+        <div class="row-left title">Display name:</div>
+        <div class="row-right">
+          <div id="rename_group" class="textbox">
+            <input id="rename_field" placeholder="Rename" />
+            <div class="rename-icons">
+              <span id="rename_exclamation" hidden>&#x26A0;</span>
+              <span id="rename_submit" class="hidden">&#10003;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="summarize_as_container" class="row hidden">
+        <div class="row-left title">Calculation:</div>
+        <div class="row-right">
+          <div class="select-dropdown">
+              <select id="column_aggregate">
+              </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="prev_value_container" class="row hidden">
+        <div class="row-left title"></div>
+        <div class="row-right summarize-checklist">
+          <div class="checklist">
+            <label class="checkbox-container">
+              <input id="pre_value_checkbox" type="checkbox" name="cb_prev_value"> <span class="checkmark"></span>
+            </label>
+            <span class="checklist-text" id="pre_checklist_text">Gab prev value</span>
+            <select id="column_period" style="display: none"></select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="sort_container" class="row hidden">
+        <div class="row-left title">Sort by:</div>
+        <div class="row-right right-content-flex">
+          <div class="select-dropdown full">
+            <select id="sort_order_by">
+            </select>
+          </div>
+          <div class="select-dropdown full hidden">
+              <select id="sort_by">
+              </select>
+          </div>
+          <div id="sort_subtotal_group" class="select-dropdown full sort-sub hidden">
+            <select id="sort_subtotal">
+            </select>
+          </div>
+          <div class="select-dropdown last-dropdown-size hidden">
+            <select id="sort_order">
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="limit_container" class="row hidden">
+        <div class="row-left title">Limit:</div>
+        <div class="row-right right-content-flex">
+          <!--
+          <div class="select-dropdown limit-select textbox">
+              <input id="input_limit" type="text" min="1" max="4" list="limit_select" autocomplete="off" placeholder="No limit applied">
+              <datalist id="limit_select" class="datalist-limit">
+
+              </datalist>
+          </div>
+          -->
+          <div class="textbox">
+              <input id="input_limit" type="text" placeholder="No limit applied">
+          </div>
+          <div class="select-dropdown last-dropdown-size">
+            <select id="limit_type_select">
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+      <!--
+      <div id="more" class="row more-separator more-expanded">
+        <div class="more-down">
+          <div class="docs-icon inline-block">
+            <div class="icon-img-container icon-img icon-img-arrow-mdown"></div>
+          </div>
+        </div>
+        <div class="more-right">
+          <div class="docs-icon inline-block">
+            <div class="icon-img-container icon-img icon-img-arrow-mright"></div>
+          </div>
+        </div>
+        <div class="flex full more-text">more</div>
+      </div>
+      <div class="flex-break"></div>
+      -->
+      <!--<div id="more_collapsible">-->
+
+      <div id="show_data_as_container" class="row hidden row-collapsible">
+        <div class="row-left title">Display as:</div>
+        <div class="row-right">
+          <div class="select-dropdown">
+              <select id="column_show_type">
+              </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="format_as_container" class="row hidden row-collapsible">
+        <div id="format_as_text" class="row-left title">Format as:</div>
+        <div class="row-right">
+          <div class="select-dropdown">
+              <select id="column_data_format">
+              </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="subtotals_container" class="row hidden row-collapsible">
+        <!--<div class="row-left title"></div>
+        <div class="row-right summarize-checklist">
+          <div class="checklist">
+            <label class="checkbox-container">
+              <input id="subtotals_checkbox" type="checkbox" name="cb_subtotals" checked="checked"> <span class="checkmark"></span>
+            </label>
+            <span class="checklist-text">Show subtotals</span>
+          </div>
+        </div>-->
+        <div class="row-left title">Show subtotals?</div>
+        <div class="row-right">
+          <div class="select-dropdown">
+              <select id="column_subtotals">
+              </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+      <!--
+      <div id="binning_container" class="row hidden row-collapsible" style="height: 75px">
+        <div class="row-left title">Binning:</div>
+        <div class="row-right">
+          <div class="flex binning-flex-column">
+          <div class="select-dropdown">
+              <select id="binning">
+              </select>
+          </div>
+          <div class="binning-holder">Ex: Ages 1-25, 26-50,...</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <div id="binning_size_container" class="row binning-size inactive hidden row-collapsible">
+        <div class="row-left title"></div>
+        <div class="row-right flex">
+
+          <div class="bin-size-content">
+            <div class="bin-size">
+              <input id="binning_size" type="text" value=""/>
+            </div>
+            <div class="bin-size-holder">bin size</div>
+          </div>
+
+          <div class="bin-size-content from">
+            <div class="bin-size-name">
+              <div class="bin-text">from</div>
+            </div>
+            <div class="bin-size-holder"></div>
+          </div>
+
+          <div class="bin-size-content">
+            <div class="bin-size">
+              <input id="binning_min" type="text" value=""/>
+            </div>
+            <div class="bin-size-holder">min</div>
+          </div>
+
+          <div class="bin-size-content to">
+            <div class="bin-size-name">
+              <div class="bin-text">to</div>
+            </div>
+            <div class="bin-size-holder"></div>
+          </div>
+
+          <div class="bin-size-content">
+            <div class="bin-size">
+              <input id="binning_max" type="text" value=""/>
+            </div>
+            <div class="bin-size-holder">max</div>
+          </div>
+
+        </div>
+      </div>
+      <div class="flex-break"></div>
+      -->
+
+      <div id="binning_container" class="row hidden row-collapsible" style="margin-top: 12px;">
+        <div class="row-left title binning-title">
+          <div class="bt-text full">
+            <div class="flex">Binning:</div>
+          </div>
+          <div class="flex"></div>
+        </div>
+        <div class="row-right flex">
+
+          <div class="full flex">
+            <div class="binning full binning-flex-column">
+              <div class="select-dropdown">
+                  <select id="binning">
+                  </select>
+              </div>
+              <div class="flex">
+                <div id="binning_holder" class="binning-holder">Ex: Ages 1-25, 26-50,...</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="binning_size_container" class="flex binning-size inactive hidden">
+
+              <div class="bin-size-content">
+                <div class="bin-size">
+                  <input id="binning_size" type="text" value=""/>
+                </div>
+                <div class="bin-size-holder">bin size</div>
+              </div>
+
+              <div class="bin-size-content">
+                <div class="bin-size">
+                  <input id="binning_min" type="text" value=""/>
+                </div>
+                <div class="bin-size-holder">from min</div>
+              </div>
+
+              <div class="bin-size-content">
+                <div class="bin-size">
+                  <input id="binning_max" type="text" value=""/>
+                </div>
+                <div class="bin-size-holder">to max</div>
+              </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="flex-break"></div>
+
+      <!--</div>-->
+
+    </div>
+</template>

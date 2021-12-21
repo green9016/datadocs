@@ -1,0 +1,7 @@
+# Common settings
+Language: Cpp
+BasedOnStyle: Chromium
+ColumnLimit: 120
+AccessModifierOffset: -2
+SpaceAfterTemplateKeyword: false
+SpacesInParentheses: true

@@ -1,0 +1,23 @@
+# Rapidjson Repository External Project template
+#
+# To use, ddd the following in your CMakefile.txt
+#
+# fetch_dependency(boost "cmake/rapidjson/rapidjson.txt.in")
+# target_include_directories(<your_target> PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/rapidjson/include)
+
+cmake_minimum_required(VERSION 2.8.2)
+
+project(rapidjson-download)
+
+include(ExternalProject)
+ExternalProject_Add(rapidjson-download
+  GIT_REPOSITORY    https://github.com/Tencent/rapidjson.git
+  GIT_TAG           v1.1.0
+  SOURCE_DIR        "${CMAKE_BINARY_DIR}/rapidjson"
+  BINARY_DIR        "${CMAKE_BINARY_DIR}/rapidjson-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND     ""
+  INSTALL_COMMAND   ""
+  TEST_COMMAND      ""
+  CMAKE_ARGS        "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}"
+)

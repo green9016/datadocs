@@ -1,0 +1,59 @@
+﻿{
+	"status": "STATUS_OK",
+	"sourceType": "CSV",
+	"delimiter": ",",
+	"rowDelimiter": "\r\n",
+	"commentCharacter": null,
+	"charset": "ASCII",
+	"quote": null,
+	"escape": null,
+	"firstDataRow": 1,
+	"commentLinesSkippedInParsing": 0,
+	"columnInfo": [
+		{
+			"initialIndex": 0,
+			"name": "playerID",
+			"is_list": false,
+			"type": {
+				"dataType": "STRING",
+				"pattern": null
+			}
+		},
+		{
+			"initialIndex": 1,
+			"name": "schoolID",
+			"is_list": false,
+			"type": {
+				"dataType": "STRING",
+				"pattern": null
+			}
+		},
+		{
+			"initialIndex": 2,
+			"name": "yearID",
+			"is_list": false,
+			"type": {
+				"dataType": "INTEGER",
+				"pattern": null
+			}
+		},
+		{
+			"initialIndex": -1,
+			"name": "__rownum__",
+			"is_list": false,
+			"type": {
+				"dataType": "INTEGER",
+				"pattern": null
+			}
+		},
+		{
+			"initialIndex": -2,
+			"name": "__count__",
+			"is_list": false,
+			"type": {
+				"dataType": "INTEGER",
+				"pattern": null
+			}
+		}
+	]
+}
